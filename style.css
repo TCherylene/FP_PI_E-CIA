@@ -1,0 +1,24 @@
+nav{
+    background-color: #3A3838;
+    height: "10%";
+}
+
+img{
+    display: block;
+}
+
+#navbarNavAltMarkup{
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+#usernameProfil, #saldoProfil{
+    color: #F9A27D;
+}
+
+#link-header{
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+}
