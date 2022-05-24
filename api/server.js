@@ -2,10 +2,33 @@ require('dotenv').config()
 
 const express = require('express')
 var app =  express();
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
 
 const jwt = require('jsonwebtoken')
 
 app.use(express.json())
+
+app.use(express.urlencoded({extended: false}))
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))
+
+const initializePassport = require('./passport-config')
+initializePassport(
+    passport, 
+    username => users.find(user => user.username === username),
+    id => users.find(user => user.id === id),
+)
 
 const users = [
     {id:1, username: "John", password: "John123", saldo:100},
@@ -13,7 +36,55 @@ const users = [
     {id:3, username: "Claire", password: "Claire123", saldo: 300}
 ]
 
-// GET - CEK SALDO - Without Authentication
+// POST - LOGIN
+app.post('/login', async (req, res) => {
+    const username = req.body.username
+
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+
+        const user = {
+            username: username,
+            password: hashedPassword
+        }
+
+        const accessToken = generateAccessToken(user)
+
+        res.json({
+            accessToken: accessToken,
+        })
+        res.redirect('/home')
+    } catch{
+         res.redirect('/login')
+    }
+})
+
+
+// POST REGISTER
+app.post('/register', checkNotAuthenticated, async (req, res) => {
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        users.push({
+            id: users.length + 1,
+            name: req.body.name,
+            username: req.body.username,
+            email: req.body.email,
+            noHP: req.body.nomor,
+            password: hashedPassword
+        })
+
+        res.redirect('/login')
+   } catch{
+        res.redirect('/register')
+   }
+})
+
+// GET - HOME
+app.get('/home', authenticateToken, (req, res) => {
+    redirect('/awal.html')
+})
+
+// GET - CEK SALDO
 app.get('/saldo/:id', authenticateToken, (req,res) => {
     const user = users.find(u => u.id == parseInt(req.params.id));
     if(!user){
@@ -25,7 +96,7 @@ app.get('/saldo/:id', authenticateToken, (req,res) => {
             })
 });
 
-// POST - TOP UP - JUMLAH - Without Authentication
+// POST - TOP UP - JUMLAH
 app.post('/topup/:id', authenticateToken, (req,res) => {
     const user = users.find(u => u.id == parseInt(req.params.id));
     if(!user){
@@ -47,7 +118,7 @@ app.post('/topup/:id', authenticateToken, (req,res) => {
             })
 })
 
-// POST - PEMBAYARAN - LAYANAN, JUMLAH & BERITA ACARA - Without Authentication
+// POST - PEMBAYARAN - LAYANAN, JUMLAH & BERITA ACARA
 app.post('/pembayaran/:id/:layanan', authenticateToken, (req, res) =>{
     const user = users.find(u => u.id == parseInt(req.params.id));
 
@@ -90,7 +161,7 @@ app.post('/pembayaran/:id/:layanan', authenticateToken, (req, res) =>{
 });
 
 
-// POST - TRANSFER - JUMLAH & BERITA ACARA - Without Authentication
+// POST - TRANSFER - JUMLAH & BERITA ACARA
 app.post('/transfer/:sender/:receiver', authenticateToken, (req,res) => {
     const sender = users.find(u => u.id == parseInt(req.params.sender));
     const receiver = users.find(u => u.id == parseInt(req.params.receiver));
@@ -160,8 +231,21 @@ function authenticateToken(req, res, next){
     })
 }
 
+function generateAccessToken(user){
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+}
+
+// Kalau user udah login tetapi buka page tertentu -> redirect ke /
+function checkNotAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+        return res.redirect('/')
+    }
+
+    next()
+}
+
 // Connect to Port Server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.warn(`App listening on ${PORT}`);
 })
