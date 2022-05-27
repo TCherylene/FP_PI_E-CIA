@@ -2,6 +2,10 @@
 
 var response = require('./res');
 var connection = require('./koneksi');
+var verifikasi = require('./middleware/verifikasi')
+var jwt_decode = require('jwt-decode');
+const express = require('express');
+const dotenv = require('dotenv');
 
 exports.index = function (req, res) {
     response.ok("Aplikasi REST API ku berjalan!", res)
@@ -9,16 +13,29 @@ exports.index = function (req, res) {
 
 // menampilkan saldo user
 exports.tampilSaldo = function (req, res){
-    
+    var token = req.headers.authorization
+
+    var tokenparsed = parseJwt(token)
+    var id = tokenparsed.rows.id_client;
+    console.log(id)
 
     connection.query('SELECT * FROM daftar_client WHERE id_client = ?', [id], function(error, rows, fields){
         if(error){
             console.log(error);
         } else {
-            response.ok(rows, res);
+            res.json({
+                // user_name: rows[0].id_client,
+                // saldo: rows[0].saldo
+            })
         }
     });
 };
+
+function parseJwt(token) {
+    var base64Payload = token.split('.')[1];
+    var payload = Buffer.from(base64Payload, 'base64');
+    return JSON.parse(payload.toString());
+  }
 
 // //menampilkan semua data mahasiswa
 // exports.tampilsemuamahasiswa = function (req, res) {

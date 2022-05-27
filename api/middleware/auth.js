@@ -65,7 +65,7 @@ exports.login = function (req, res) {
      query = mysql.format(query, table);
 
      conn.query(query, function (error, rows) {
-          //if (error) throw error;
+          if (error) console.log(error);
 
           if (rows.length == 1) {
                var token = jwt.sign({rows}, config.secret);

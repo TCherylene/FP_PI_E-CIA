@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Bulan Mei 2022 pada 15.39
+-- Waktu pembuatan: 27 Bulan Mei 2022 pada 17.55
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -47,7 +47,7 @@ CREATE TABLE `daftar_client` (
   `nama_client` varchar(50) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `no_hp` int(11) NOT NULL,
-  `password` varchar(25) NOT NULL,
+  `password` text NOT NULL,
   `saldo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -56,13 +56,9 @@ CREATE TABLE `daftar_client` (
 --
 
 INSERT INTO `daftar_client` (`id_client`, `nama_client`, `user_name`, `no_hp`, `password`, `saldo`) VALUES
-(1, 'halo', 'alhamdullillah', 123, '202cb962ac59075b964b07152', 0),
-(2, 'halo', 'hai', 123, '202cb962ac59075b964b07152', 0),
-(3, 'halo', 'hehe', 123, '202cb962ac59075b964b07152', 0),
-(4, 'halo', 'hallllllooooooo', 123, '202cb962ac59075b964b07152', 0),
-(5, 'halo', 'cherylene', 123, '202cb962ac59075b964b07152', 0),
-(6, 'cheryy', 'Manura', 123, '202cb962ac59075b964b07152', 0),
-(7, 'Cher', 'CheryleneT', 123, '202cb962ac59075b964b07152', 0);
+(9, 'Cher', 'HAIII', 123, '202cb962ac59075b964b07152d234b70', 0),
+(10, 'Cher', 'Hellow', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
+(11, 'Cher', 'Hellllo', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0);
 
 -- --------------------------------------------------------
 
@@ -134,7 +130,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

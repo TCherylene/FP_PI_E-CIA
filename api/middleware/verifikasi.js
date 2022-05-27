@@ -15,12 +15,6 @@ function verifikasi(){
                     return rest.status(401).send({auth:false, message:'Token tidak terdaftar!'});
                 }else {
                     next()
-                    // if(role == 1){
-                    //     req.auth = decoded;
-                    //     next();
-                    // }else {
-                    // return rest.status(401).send({auth:false, message:'Gagal mengotorisasi role anda!'});
-                    // }
                 }
             });
         }else {
