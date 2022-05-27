@@ -30,7 +30,7 @@ exports.registrasi = function (req, res) {
                     var table = [post.name, post.user_name, post.noHP, post.password];
                     
                     conn.query(query, [table], function(err, result){
-                         if(err) throw err;
+                         if(err) console.log("Data gagal ditambahkan");
 
                          console.log("Data berhasil ditambahkan");
                     }).end()

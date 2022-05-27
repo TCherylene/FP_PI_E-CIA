@@ -1,15 +1,4 @@
 var mysql = require('mysql');
-var mariadb = require('mariadb');
- 
-// Create a connection pool
-var pool = 
-  mariadb.createPool({
-    host: "localhost", 
-    port: 3000,
-    user: "root", 
-    password: "",
-    database: "e-cia"
-  });
 
 // Create a connection
 var conn = 
@@ -28,11 +17,5 @@ conn.connect(function(err, conn){
     }
     if(conn) console.log("MySQL terkoneksi");
 })
-
-// module.exports = pool.getConnection(function(err, connection) {
-//     if(err) return console.log('MariaDB terkoneksi');
-
-//     console.log('MariaDB tidak terkoneksi');
-// })
 
 module.exports = conn;
