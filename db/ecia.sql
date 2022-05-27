@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2022 at 05:27 AM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.11
+-- Waktu pembuatan: 27 Bulan Mei 2022 pada 15.39
+-- Versi server: 10.4.21-MariaDB
+-- Versi PHP: 8.0.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `e-cia`
+-- Database: `ecia`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bayar`
+-- Struktur dari tabel `bayar`
 --
 
 CREATE TABLE `bayar` (
@@ -34,12 +34,12 @@ CREATE TABLE `bayar` (
   `jumlah_pembayaran` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `daftar_client`
+-- Struktur dari tabel `daftar_client`
 --
 
 CREATE TABLE `daftar_client` (
@@ -47,24 +47,27 @@ CREATE TABLE `daftar_client` (
   `nama_client` varchar(50) NOT NULL,
   `user_name` varchar(50) NOT NULL,
   `no_hp` int(11) NOT NULL,
-  `password` varchar(25) NOT NULL
-) ;
+  `password` varchar(25) NOT NULL,
+  `saldo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `daftar_client`
+--
+
+INSERT INTO `daftar_client` (`id_client`, `nama_client`, `user_name`, `no_hp`, `password`, `saldo`) VALUES
+(1, 'halo', 'alhamdullillah', 123, '202cb962ac59075b964b07152', 0),
+(2, 'halo', 'hai', 123, '202cb962ac59075b964b07152', 0),
+(3, 'halo', 'hehe', 123, '202cb962ac59075b964b07152', 0),
+(4, 'halo', 'hallllllooooooo', 123, '202cb962ac59075b964b07152', 0),
+(5, 'halo', 'cherylene', 123, '202cb962ac59075b964b07152', 0),
+(6, 'cheryy', 'Manura', 123, '202cb962ac59075b964b07152', 0),
+(7, 'Cher', 'CheryleneT', 123, '202cb962ac59075b964b07152', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `saldo`
---
-
-CREATE TABLE `saldo` (
-  `saldo_client` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL
-) ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `topup`
+-- Struktur dari tabel `topup`
 --
 
 CREATE TABLE `topup` (
@@ -72,12 +75,12 @@ CREATE TABLE `topup` (
   `id_client` int(11) NOT NULL,
   `jumlah_topUp` bigint(20) NOT NULL,
   `status` tinyint(1) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
@@ -89,41 +92,34 @@ CREATE TABLE `transaksi` (
   `nominal` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `bayar`
+-- Indeks untuk tabel `bayar`
 --
 ALTER TABLE `bayar`
   ADD PRIMARY KEY (`id_bayar`),
   ADD KEY `id_client` (`id_client`);
 
 --
--- Indexes for table `daftar_client`
+-- Indeks untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
   ADD PRIMARY KEY (`id_client`);
 
 --
--- Indexes for table `saldo`
---
-ALTER TABLE `saldo`
-  ADD PRIMARY KEY (`saldo_client`),
-  ADD KEY `id_client` (`id_client`);
-
---
--- Indexes for table `topup`
+-- Indeks untuk tabel `topup`
 --
 ALTER TABLE `topup`
   ADD PRIMARY KEY (`id_topUp`),
   ADD KEY `id_client` (`id_client`);
 
 --
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
@@ -131,29 +127,33 @@ ALTER TABLE `transaksi`
   ADD KEY `id_penerima` (`id_penerima`);
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- Constraints for table `bayar`
+-- AUTO_INCREMENT untuk tabel `daftar_client`
+--
+ALTER TABLE `daftar_client`
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `bayar`
 --
 ALTER TABLE `bayar`
   ADD CONSTRAINT `bayar_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
 
 --
--- Constraints for table `saldo`
---
-ALTER TABLE `saldo`
-  ADD CONSTRAINT `saldo_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
-
---
--- Constraints for table `topup`
+-- Ketidakleluasaan untuk tabel `topup`
 --
 ALTER TABLE `topup`
   ADD CONSTRAINT `topup_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
 
 --
--- Constraints for table `transaksi`
+-- Ketidakleluasaan untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_pengirim`) REFERENCES `daftar_client` (`id_client`),
