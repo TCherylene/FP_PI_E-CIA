@@ -1,10 +1,10 @@
-var connection = require('../koneksi');
 var mysql = require('mysql');
 var md5 = require('md5');
 var response = require('../res');
 var jwt = require('jsonwebtoken');
 var config = require('../config/secret');
 var ip = require('ip');
+const conn = require('../koneksi');
 
 //controller untuk registrasi user
 exports.registrasi = function (req, res) {
@@ -20,17 +20,26 @@ exports.registrasi = function (req, res) {
 
      query = mysql.format(query, table);
 
-     connection.query(query, function (error, rows) {
+     conn.query(query, function (error, rows) {
           if (error) {
                console.log(error);
           } else {
                // kalau gaada
                if (rows.length == 0) {
-                    var query = "INSERT INTO ?? (??, ??, ??, ??) VALUES (?, ?, ?, ?)";
-                    var table = [  "daftar_client", 
-                                   "nama_client", "user_name", "no_hp", "password",
-                                   post.name, post.user_name, post.noHP, post.password];
-                    query = mysql.format(query, table);
+                    var query = "INSERT INTO daftar_client (nama_client, user_name, no_hp, password) VALUES (?)";
+                    var table = [post.name, post.user_name, post.noHP, post.password];
+                    
+                    conn.query(query, [table], function(err, result){
+                         if(err) throw err;
+
+                         console.log("Data berhasil ditambahkan");
+                    }).end()
+
+                    res.json({
+                         user_name: post.user_name,
+                         message: "Berhasil ditambahkan"
+                    })
+
                } else {
                     res.json({
                          success: false,
@@ -60,7 +69,7 @@ exports.login = function (req, res) {
 
      query = mysql.format(query, table);
 
-     connection.query(query, function (error, rows) {
+     conn.query(query, function (error, rows) {
           if (error) {
                console.log(error);
           } else {
@@ -87,7 +96,7 @@ exports.login = function (req, res) {
                     var table = ["akses_token"];
 
                     query = mysql.format(query, table);
-                    connection.query(query, data, function (error, rows) {
+                    conn.query(query, data, function (error, rows) {
                          if (error) {
                               console.log(error);
                          } else {
@@ -116,7 +125,7 @@ exports.halamanrahasia = function (req, res) {
 
 //menampilkan semua data mahasiswa
 exports.adminmahasiswa = function (req, res) {
-     connection.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
+     conn.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
           if (error) {
                console.log(error);
           } else {
