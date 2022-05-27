@@ -11,7 +11,7 @@ exports.index = function (req, res) {
 exports.tampilSaldo = function (req, res){
     
 
-    connection.query('SELECT * FROM saldo WHERE id_client = ?', [id], function(error, rows, fields){
+    connection.query('SELECT * FROM daftar_client WHERE id_client = ?', [id], function(error, rows, fields){
         if(error){
             console.log(error);
         } else {

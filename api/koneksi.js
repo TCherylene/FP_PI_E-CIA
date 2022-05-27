@@ -13,7 +13,6 @@ var conn =
 conn.connect(function(err, conn){
     if(err) {
         console.log("MySQL tidak terkoneksi");
-        throw err;
     }
     if(conn) console.log("MySQL terkoneksi");
 })

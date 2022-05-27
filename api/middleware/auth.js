@@ -13,6 +13,7 @@ exports.registrasi = function (req, res) {
           user_name: req.body.user_name,
           password: md5(req.body.password),
           noHP: req.body.noHP,
+          saldo: 0
      }
 
      var query = "SELECT user_name FROM ?? WHERE ??=?";
@@ -26,8 +27,8 @@ exports.registrasi = function (req, res) {
           } else {
                // kalau gaada
                if (rows.length == 0) {
-                    var query = "INSERT INTO daftar_client (nama_client, user_name, no_hp, password) VALUES (?)";
-                    var table = [post.name, post.user_name, post.noHP, post.password];
+                    var query = "INSERT INTO daftar_client (nama_client, user_name, no_hp, password, saldo) VALUES (?)";
+                    var table = [post.name, post.user_name, post.noHP, post.password, post.saldo];
                     
                     conn.query(query, [table], function(err, result){
                          if(err) console.log("Data gagal ditambahkan");
@@ -44,92 +45,55 @@ exports.registrasi = function (req, res) {
                     res.json({
                          success: false,
                          isRegistered: true,
-                         message: "user_name anda telah terdaftar!"
+                         message: "Data telah terdaftar!"
                     }).end();
                }
           }
-     })
+     }).end
 }
 
 // controller untuk login
 exports.login = function (req, res) {
      var post = {
-          password: req.body.password,
-          user_name: req.body.user_name
+          user_name: req.body.user_name,
+          password: md5(req.body.password)
      }
 
-     var query = "SELECT ??, ??, ??, ??, ?? FROM ?? JOIN ?? WHERE ??=? AND ??=?";
-     var table = [  //SELECT
-                    "id_client", "nama_client", "user_name", md5(post.password), saldo,
-                    //FROM & JOIN
-                    "daftar_client", "saldo", 
-                    //WHERE
-                    "user_name", post.user_name,
-                    "password", post.password];
+     var query = "SELECT id_client, nama_client, user_name, password, saldo FROM daftar_client WHERE user_name=? AND password=?";
+     var table = [post.user_name, post.password];
 
      query = mysql.format(query, table);
 
      conn.query(query, function (error, rows) {
-          if (error) {
-               console.log(error);
+          //if (error) throw error;
+
+          if (rows.length == 1) {
+               var token = jwt.sign({rows}, config.secret);
+
+               res.json({
+                    success: true,
+                    message: 'Token JWT tergenerate!',
+                    token: token,
+                    currUser: post.user_name,
+                    user: post.user_name
+               });
           } else {
-               if (rows.length == 1) {
-                    var token = jwt.sign({ rows }, config.secret, {
-                         //ubah expires dalam ms
-                         expiresIn: '2400000'
-                    });
-
-                    id_user = rows[0].id;
-                    //1 tambahan row username
-                    username = rows[0].username;
-
-                    // var expired = 30000
-                    var expired = 2400000
-
-                    var data = {
-                         id_user: id_user,
-                         access_token: token,
-                         ip_address: ip.address()
-                    }
-
-                    var query = "INSERT INTO ?? SET ?";
-                    var table = ["akses_token"];
-
-                    query = mysql.format(query, table);
-                    conn.query(query, data, function (error, rows) {
-                         if (error) {
-                              console.log(error);
-                         } else {
-                              res.json({
-                                   success: true,
-                                   message: 'Token JWT tergenerate!',
-                                   token: token,
-                                   //4 tambahkan expired time
-                                   expires: expired,
-                                   currUser: data.id_user,
-                                   user: username,
-                              });
-                         }
-                    });
-               }
-               else {
-                    res.json({ "Error": true, "Message": "Username atau password salah!" });
-               }
+               res.json({"Error": true, "Message": "Username atau password salah!"});
           }
-     });
-}
+     })
+};             
+ 
+// exports.halamanrahasia = function (req, res) {
+//      response.ok("Halaman ini hanya untuk user dengan role = 2!", res);
+// }
 
-exports.halamanrahasia = function (req, res) {
-     response.ok("Halaman ini hanya untuk user dengan role = 2!", res);
-}
-
-//menampilkan semua data mahasiswa
-exports.adminmahasiswa = function (req, res) {
-     conn.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
-          if (error) {
-               console.log(error);
-          } else {
-               response.ok(rows, res)
-          }
-     });
-};
+// //menampilkan semua data mahasiswa
+// exports.adminmahasiswa = function (req, res) {
+//      conn.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
+//           if (error) {
+//                console.log(error);
+//           } else {
+//                response.ok(rows, res)
+//           }
+//      });
+// };
