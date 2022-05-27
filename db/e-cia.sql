@@ -34,7 +34,7 @@ CREATE TABLE `bayar` (
   `jumlah_pembayaran` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ;
 
 -- --------------------------------------------------------
 
@@ -48,7 +48,7 @@ CREATE TABLE `daftar_client` (
   `user_name` varchar(50) NOT NULL,
   `no_hp` int(11) NOT NULL,
   `password` varchar(25) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ;
 
 -- --------------------------------------------------------
 
@@ -59,7 +59,7 @@ CREATE TABLE `daftar_client` (
 CREATE TABLE `saldo` (
   `saldo_client` int(11) NOT NULL,
   `id_client` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ;
 
 -- --------------------------------------------------------
 
@@ -72,7 +72,7 @@ CREATE TABLE `topup` (
   `id_client` int(11) NOT NULL,
   `jumlah_topUp` bigint(20) NOT NULL,
   `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ;
 
 -- --------------------------------------------------------
 
@@ -89,7 +89,7 @@ CREATE TABLE `transaksi` (
   `nominal` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);
 
 --
 -- Indexes for dumped tables
