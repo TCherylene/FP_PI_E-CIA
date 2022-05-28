@@ -19,8 +19,8 @@ exports.tampilSaldo = function (req, res){
             console.log(error);
         } else {
             res.json({
-                user_name: data.id_client,
-                saldo: data.saldo
+                user_name: rows[0].user_name,
+                saldo: rows[0].saldo
             })
         }
     });
@@ -45,14 +45,19 @@ exports.topUp = function(req,res){
 
     query = mysql.format(query, table);
 
-    conn.query(query, function(error, rows, fields){
-        if(error){
-            throw error;
-        } else {
-            res.json({
-                message: "Top up berhasil"
-            })
-        }
+    conn.query(query, function(error, result, fields){
+        if (error) throw error;
+
+        conn.query("SELECT * FROM daftar_client WHERE id_client = ?", [data.id_client], function (error, rows, fields){
+            if(error){
+                throw error;
+            } else {
+                res.json({
+                    message: "Top up berhasil",
+                    saldo: rows[0].saldo
+                })
+            }
+        })
     })
 }
 
