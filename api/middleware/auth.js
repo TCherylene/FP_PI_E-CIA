@@ -49,7 +49,7 @@ exports.registrasi = function (req, res) {
                     }).end();
                }
           }
-     }).end
+     })
 }
 
 // controller untuk login
@@ -65,7 +65,7 @@ exports.login = function (req, res) {
      query = mysql.format(query, table);
 
      conn.query(query, function (error, rows) {
-          if (error) console.log(error);
+          if (error) returnconsole.log(error);
 
           if (rows.length == 1) {
                var token = jwt.sign({rows}, config.secret);
@@ -83,17 +83,3 @@ exports.login = function (req, res) {
      })
 };             
  
-// exports.halamanrahasia = function (req, res) {
-//      response.ok("Halaman ini hanya untuk user dengan role = 2!", res);
-// }
-
-// //menampilkan semua data mahasiswa
-// exports.adminmahasiswa = function (req, res) {
-//      conn.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
-//           if (error) {
-//                console.log(error);
-//           } else {
-//                response.ok(rows, res)
-//           }
-//      });
-// };
