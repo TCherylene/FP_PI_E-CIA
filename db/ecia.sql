@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 27 Bulan Mei 2022 pada 17.55
+-- Waktu pembuatan: 29 Bulan Mei 2022 pada 18.01
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -56,9 +56,11 @@ CREATE TABLE `daftar_client` (
 --
 
 INSERT INTO `daftar_client` (`id_client`, `nama_client`, `user_name`, `no_hp`, `password`, `saldo`) VALUES
-(9, 'Cher', 'HAIII', 123, '202cb962ac59075b964b07152d234b70', 0),
-(10, 'Cher', 'Hellow', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
-(11, 'Cher', 'Hellllo', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0);
+(9, 'Cher', 'HAIII', 123, '202cb962ac59075b964b07152d234b70', 97),
+(10, 'Cher', 'Hellow', 123, '81dc9bdb52d04dc20036dbd8313ed055', 5903),
+(11, 'Cher', 'Hellllo', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
+(12, 'Cher', 'CHerylene', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
+(13, 'Cher', 'HEHE', 123, '81dc9bdb52d04dc20036dbd8313ed055', 9000);
 
 -- --------------------------------------------------------
 
@@ -70,8 +72,15 @@ CREATE TABLE `topup` (
   `id_topUp` int(11) NOT NULL,
   `id_client` int(11) NOT NULL,
   `jumlah_topUp` bigint(20) NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `topup`
+--
+
+INSERT INTO `topup` (`id_topUp`, `id_client`, `jumlah_topUp`, `status`) VALUES
+(1, 10, 5000, 1);
 
 -- --------------------------------------------------------
 
@@ -87,7 +96,7 @@ CREATE TABLE `transaksi` (
   `jam` time NOT NULL,
   `nominal` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
-  `status` tinyint(1) NOT NULL
+  `status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -119,6 +128,7 @@ ALTER TABLE `topup`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_transaksi`),
+  ADD UNIQUE KEY `id_transaksi` (`id_transaksi`),
   ADD KEY `id_pengirim` (`id_pengirim`),
   ADD KEY `id_penerima` (`id_penerima`);
 
@@ -130,7 +140,19 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT untuk tabel `topup`
+--
+ALTER TABLE `topup`
+  MODIFY `id_topUp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `transaksi`
+--
+ALTER TABLE `transaksi`
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
