@@ -5,7 +5,6 @@ var connection = require('../koneksi');
 var parsetoken = require('./parseJWT');
 const conn = require('../koneksi');
 var mysql = require('mysql');
-const { get } = require('.');
 
 // menampilkan saldo user
 exports.tampilSaldo = function (req, res){
@@ -73,7 +72,7 @@ exports.topUp = function(req,res){
     })
 }
 
-// TRANSFER - PENERIMA, JUMLAH, BERITA ACARA
+// TRANSFER - penerima, jumlah, beritaAcara
 exports.transfer = function(req, res){
     var token = req.headers.authorization;
     var tokenparsed = parsetoken(token);
@@ -141,6 +140,7 @@ exports.transfer = function(req, res){
         conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [idPengirim], function(error, rows, fields){
             if (error) throw error;
             
+            // Penerimanya diri sendiri
             if(idPenerima == idPengirim){
                 return res.status(400).json({
                     message: "Tidak dapat mengirim ke diri sendiri"
@@ -190,13 +190,13 @@ exports.transfer = function(req, res){
                 })
 
                 var queryTransaksiSuccess = ("INSERT INTO transaksi(id_pengirim, id_penerima, tanggal, jam, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                var dataTransaksiSuccess = [ idPengirim,
-                                        idPenerima,
-                                        currentDate,
-                                        currentTime,
-                                        dataPostman.jumlah,
-                                        dataPostman.beritaAcara,
-                                        statusSuccess
+                var dataTransaksiSuccess = [idPengirim,
+                                            idPenerima,
+                                            currentDate,
+                                            currentTime,
+                                            dataPostman.jumlah,
+                                            dataPostman.beritaAcara,
+                                            statusSuccess
                 ]
 
                 queryTransaksiSuccess = mysql.format(queryTransaksiSuccess, dataTransaksiSuccess)
