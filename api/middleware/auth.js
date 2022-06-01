@@ -54,8 +54,9 @@ exports.registrasi = function (req, res) {
 
      var cariJumlahClient = "SELECT id_client FROM daftar_client"
      conn.query(cariJumlahClient, function(error, rows){
-          var idTerakhir = rows[rows.length - 1]
-          var nomor_wallet = md5(config.secretKeyMoney + crypto.randomBytes(64).toString("hex") + idTerakhir.toString("hex"))
+          var idTerakhir = rows[rows.length - 1].id_client
+
+          var nomor_wallet = md5(config.secretKeyMoney + config.secretKey + idTerakhir.toString(16))
      
           conn.query(query, function (error, rows) {
                if (error) {

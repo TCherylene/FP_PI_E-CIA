@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 01 Jun 2022 pada 16.33
+-- Waktu pembuatan: 01 Jun 2022 pada 16.56
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -33,6 +33,8 @@ CREATE TABLE `bayar` (
   `nomor_pelanggan` int(11) NOT NULL,
   `layanan` int(11) NOT NULL,
   `jumlah_pembayaran` bigint(20) NOT NULL,
+  `tanggal` date NOT NULL DEFAULT current_timestamp(),
+  `waktu` time NOT NULL DEFAULT current_timestamp(),
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -60,7 +62,9 @@ CREATE TABLE `daftar_client` (
 INSERT INTO `daftar_client` (`id_client`, `nama_client`, `email`, `password`, `nomor_wallet`, `saldo`, `role`) VALUES
 (1, 'Manura', 'manura@manura.com', '81dc9bdb52d04dc20036dbd8313ed055', '54ac17782fe813a6fe21a0d5133cc744', 10000, 1),
 (2, 'Alda', 'alda@alda.com', '81dc9bdb52d04dc20036dbd8313ed055', '20c7dd637bcdeef433589d1321f52363', 0, 1),
-(3, 'Ira', 'ira@ira.com', '81dc9bdb52d04dc20036dbd8313ed055', '87823d8de907cd4a582dee291d146f92', 60000, 1);
+(3, 'Ira', 'ira@ira.com', '81dc9bdb52d04dc20036dbd8313ed055', '87823d8de907cd4a582dee291d146f92', 60000, 1),
+(23, 'orang', 'orang@orang.com', '81dc9bdb52d04dc20036dbd8313ed055', 'f32ca741291b8d0ef14f6b6ed7538d3b', 0, 0),
+(24, 'halo', 'halo@halo.com', '81dc9bdb52d04dc20036dbd8313ed055', '7a98ddf3ac08ccbb32e3668cde6cd59e', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -85,6 +89,8 @@ CREATE TABLE `topup` (
   `id_topUp` int(11) NOT NULL,
   `id_client` int(11) NOT NULL,
   `jumlah_topUp` bigint(20) NOT NULL,
+  `tanggal` date NOT NULL DEFAULT current_timestamp(),
+  `waktu` time NOT NULL DEFAULT current_timestamp(),
   `status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -92,15 +98,15 @@ CREATE TABLE `topup` (
 -- Dumping data untuk tabel `topup`
 --
 
-INSERT INTO `topup` (`id_topUp`, `id_client`, `jumlah_topUp`, `status`) VALUES
-(11, 3, 5000, 1),
-(12, 3, 5000, 1),
-(13, 3, 5000, 1),
-(14, 3, 5000, 1),
-(15, 3, 5000, 1),
-(16, 3, 5000, 1),
-(17, 1, 5000, 1),
-(18, 1, 5000, 1);
+INSERT INTO `topup` (`id_topUp`, `id_client`, `jumlah_topUp`, `tanggal`, `waktu`, `status`) VALUES
+(11, 3, 5000, '2022-06-01', '21:40:58', 1),
+(12, 3, 5000, '2022-06-01', '21:40:58', 1),
+(13, 3, 5000, '2022-06-01', '21:40:58', 1),
+(14, 3, 5000, '2022-06-01', '21:40:58', 1),
+(15, 3, 5000, '2022-06-01', '21:40:58', 1),
+(16, 3, 5000, '2022-06-01', '21:40:58', 1),
+(17, 1, 5000, '2022-06-01', '21:40:58', 1),
+(18, 1, 5000, '2022-06-01', '21:40:58', 1);
 
 -- --------------------------------------------------------
 
@@ -112,8 +118,8 @@ CREATE TABLE `transaksi` (
   `id_transaksi` int(11) NOT NULL,
   `id_pengirim` int(11) NOT NULL,
   `id_penerima` int(11) NOT NULL,
-  `tanggal` date NOT NULL,
-  `jam` time NOT NULL,
+  `tanggal` date NOT NULL DEFAULT current_timestamp(),
+  `jam` time NOT NULL DEFAULT current_timestamp(),
   `nominal` bigint(20) NOT NULL,
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) DEFAULT NULL
@@ -172,7 +178,7 @@ ALTER TABLE `bayar`
 -- AUTO_INCREMENT untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `daftar_client_layanan`

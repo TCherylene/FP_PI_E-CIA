@@ -133,12 +133,8 @@ exports.transfer = function(req, res){
 
     selectReceiver = mysql.format(selectReceiver, dataSelectReceiver);
 
-    var queryTransaksi = ("INSERT INTO transaksi(id_pengirim, id_penerima, tanggal, jam, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    var queryTransaksi = ("INSERT INTO transaksi(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
 
-    var DateNow = new Date();
-    var currentDate = DateNow.getFullYear() + "/" + (DateNow.getMonth() + 1) + "/" + DateNow.getDate();
-    var currentTime = DateNow.getHours() + ":" + DateNow.getMinutes() + ":" + DateNow.getSeconds();
-    
     var statusSuccess = true;
     var statusFailed = false;
 
@@ -157,8 +153,6 @@ exports.transfer = function(req, res){
 
         const dataMasukTransaksi = [idPengirim,
                                     idPenerima,
-                                    currentDate,
-                                    currentTime,
                                     dataPostman.jumlah,
                                     dataPostman.beritaAcara,
                                     statusFailed
@@ -210,11 +204,9 @@ exports.transfer = function(req, res){
                     serverErrorResponse(error1, error);
                 })
 
-                var queryTransaksiSuccess = ("INSERT INTO transaksi(id_pengirim, id_penerima, tanggal, jam, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                var queryTransaksiSuccess = ("INSERT INTO transaksi(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
                 var dataTransaksiSuccess = [idPengirim,
                                             idPenerima,
-                                            currentDate,
-                                            currentTime,
                                             dataPostman.jumlah,
                                             dataPostman.beritaAcara,
                                             statusSuccess
