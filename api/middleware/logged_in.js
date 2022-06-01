@@ -16,10 +16,6 @@ function successResponse(message, res){
     return response.success(message, res)
 }
 
-function successResponseAddition(message, res, dataBaru, valueDataBaru){
-    return response.success(message, res, dataBaru, valueDataBaru)
-}
-
 function userErrorResponse(message, res){
     return response.failed(message, res)
 }
@@ -127,13 +123,13 @@ exports.transfer = function(req, res){
         return userErrorResponse("Jumlah yang ditransfer harus lebih dari 0", res)
     }
 
-    // Query untuk masukkan ke dalam database transaksi
+    // Query untuk masukkan ke dalam database transfer
     var selectReceiver = ("SELECT id_client, user_name FROM daftar_client WHERE user_name = ?");
     var dataSelectReceiver = [dataPostman.penerima];
 
     selectReceiver = mysql.format(selectReceiver, dataSelectReceiver);
 
-    var queryTransaksi = ("INSERT INTO transaksi(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
+    var querytransfer = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
 
     var statusSuccess = true;
     var statusFailed = false;
@@ -151,14 +147,14 @@ exports.transfer = function(req, res){
         var idPengirim = dataDatabase.id_client;
         var idPenerima = result[0].id_client;
 
-        const dataMasukTransaksi = [idPengirim,
+        const dataMasuktransfer = [idPengirim,
                                     idPenerima,
                                     dataPostman.jumlah,
                                     dataPostman.beritaAcara,
                                     statusFailed
                                 ]
 
-        queryTransaksi = mysql.format(queryTransaksi, dataMasukTransaksi)
+        querytransfer = mysql.format(querytransfer, dataMasuktransfer)
 
         // Penerima & saldonya ada
         conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [idPengirim], function(error, rows, fields){
@@ -171,7 +167,7 @@ exports.transfer = function(req, res){
 
             // Uangnya kurang
             if (rows[0].saldo < dataPostman.jumlah){
-                conn.query(queryTransaksi)
+                conn.query(querytransfer)
                 
                 return userErrorResponse("Saldo anda tidak mencukupi", res)
             }
@@ -188,8 +184,7 @@ exports.transfer = function(req, res){
                     if(error){
                         return serverErrorResponse(error1, error);
                     } else {
-                        var jumlah = rows[0].saldo - dataPostman.jumlah
-                        successResponseAddition("Transfer berhasil", res, "saldo", jumlah)
+                        successResponse("Transfer berhasil", res);
                     }
                     })
                 }})
@@ -204,18 +199,18 @@ exports.transfer = function(req, res){
                     serverErrorResponse(error1, error);
                 })
 
-                var queryTransaksiSuccess = ("INSERT INTO transaksi(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
-                var dataTransaksiSuccess = [idPengirim,
+                // Masukkan ke dalam tabel transfer
+                var querytransferSuccess = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
+                var datatransferSuccess = [idPengirim,
                                             idPenerima,
                                             dataPostman.jumlah,
                                             dataPostman.beritaAcara,
                                             statusSuccess
                 ]
 
-                queryTransaksiSuccess = mysql.format(queryTransaksiSuccess, dataTransaksiSuccess)
-                console.log(queryTransaksiSuccess)
+                querytransferSuccess = mysql.format(querytransferSuccess, datatransferSuccess)
 
-                conn.query(queryTransaksiSuccess, function(error, rows, fields){
+                conn.query(querytransferSuccess, function(error, rows, fields){
                     if(error) return serverErrorResponse(error1, error);
                 })
         }

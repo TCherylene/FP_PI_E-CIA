@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 01 Jun 2022 pada 16.56
+-- Waktu pembuatan: 01 Jun 2022 pada 17.08
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -111,11 +111,11 @@ INSERT INTO `topup` (`id_topUp`, `id_client`, `jumlah_topUp`, `tanggal`, `waktu`
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `transaksi`
+-- Struktur dari tabel `transfer`
 --
 
-CREATE TABLE `transaksi` (
-  `id_transaksi` int(11) NOT NULL,
+CREATE TABLE `transfer` (
+  `id_transfer` int(11) NOT NULL,
   `id_pengirim` int(11) NOT NULL,
   `id_penerima` int(11) NOT NULL,
   `tanggal` date NOT NULL DEFAULT current_timestamp(),
@@ -156,11 +156,11 @@ ALTER TABLE `topup`
   ADD KEY `id_client` (`id_client`);
 
 --
--- Indeks untuk tabel `transaksi`
+-- Indeks untuk tabel `transfer`
 --
-ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`id_transaksi`),
-  ADD UNIQUE KEY `id_transaksi` (`id_transaksi`),
+ALTER TABLE `transfer`
+  ADD PRIMARY KEY (`id_transfer`),
+  ADD UNIQUE KEY `id_transaksi` (`id_transfer`),
   ADD KEY `id_pengirim` (`id_pengirim`),
   ADD KEY `id_penerima` (`id_penerima`);
 
@@ -193,10 +193,10 @@ ALTER TABLE `topup`
   MODIFY `id_topUp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT untuk tabel `transaksi`
+-- AUTO_INCREMENT untuk tabel `transfer`
 --
-ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+ALTER TABLE `transfer`
+  MODIFY `id_transfer` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -215,11 +215,11 @@ ALTER TABLE `topup`
   ADD CONSTRAINT `topup_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
 
 --
--- Ketidakleluasaan untuk tabel `transaksi`
+-- Ketidakleluasaan untuk tabel `transfer`
 --
-ALTER TABLE `transaksi`
-  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_pengirim`) REFERENCES `daftar_client` (`id_client`),
-  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_penerima`) REFERENCES `daftar_client` (`id_client`);
+ALTER TABLE `transfer`
+  ADD CONSTRAINT `transfer_ibfk_1` FOREIGN KEY (`id_pengirim`) REFERENCES `daftar_client` (`id_client`),
+  ADD CONSTRAINT `transfer_ibfk_2` FOREIGN KEY (`id_penerima`) REFERENCES `daftar_client` (`id_client`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

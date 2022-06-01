@@ -5,7 +5,6 @@ var jwt = require('jsonwebtoken');
 var config = require('../config/secret');
 var ip = require('ip');
 const conn = require('../koneksi');
-var crypto = require('crypto');
 
 var error1 = "hello";
 
@@ -15,10 +14,6 @@ function serverErrorResponse(error1, error) {
  
  function successResponse(message, res){
      return response.success(message, res)
- }
- 
- function successResponseAddition(message, res, dataBaru, valueDataBaru){
-     return response.success(message, res, dataBaru, valueDataBaru)
  }
  
  function userErrorResponse(message, res){
