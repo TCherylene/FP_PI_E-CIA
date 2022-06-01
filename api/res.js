@@ -1,15 +1,45 @@
 'use strict';
 
-exports.ok = function(values, res){
+exports.successWithAdditionalInfo = function successWithAdditionalInfo(message, res, dataBaru, valueDataBaru){
     var data = {
-        'status':200,
-        'values':values
+        "status": 200,
+        "message": message,
+        [dataBaru]: valueDataBaru
+    }
+
+    res.json(data);
+    res.end()
+}
+
+exports.success = function(message, res){
+    var data = {
+        "status":200,
+        "message":message
     };
 
-    console.log(values)
     res.json(data);
     res.end();
 };
+
+exports.failed = function(message, res){
+    var data = {
+        "status": 400,
+        "message": message
+    }
+
+    res.json(data);
+    res.end();
+}
+
+exports.serverError = function(message, res){
+    var data = {
+        "status": 500,
+        "message": "Server Error"
+    }
+    
+    res.json(data);
+    res.end();
+}
 
 //response untuk nested matakuliah
 exports.oknested = function(values, res){

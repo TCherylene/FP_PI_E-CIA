@@ -4,15 +4,23 @@ var router = express.Router();
 var verifikasi = require('./verifikasi')
 var jsonku = require('./logged_in');
 
-//daftarkan menu registrasi
-router.post('/register', auth.registrasi);
+// Registrasi
+router.post('/profile', auth.registrasi);
+
+// Login
 router.post('/login', auth.login);
 
-//alamat yang perlu authentication
-router.get('/saldo', verifikasi(), jsonku.tampilSaldo);
-router.post('/topup', verifikasi(), jsonku.topUp);
+// GET profile - Sebelumnya: saldo
+router.get('/profile', verifikasi(), jsonku.tampilSaldo);
+
+// PUT profile - Sebelumnya: top up
+router.put('/profile/:id', verifikasi(), jsonku.topUp);
+
+
 router.post('/transfer', verifikasi(), jsonku.transfer);
-router.post('/riwayat', verifikasi(), jsonku.history);
-router.post('/bayar', verifikasi(), jsonku.bayar);
+router.get('/riwayat', verifikasi(), jsonku.history);
+
+// POST pembelian - Sebelumnya: bayar
+router.post('/pembelian', verifikasi(), jsonku.bayar);
 
 module.exports = router;

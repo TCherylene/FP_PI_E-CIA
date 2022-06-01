@@ -1,26 +1,45 @@
 'use strict';
 
 var response = require('../res');
-var connection = require('../koneksi');
 var parsetoken = require('./parseJWT');
 const conn = require('../koneksi');
 var mysql = require('mysql');
+var historyTransfer = require('../history/historyTransfer')
+
+var error1 = "hello";
+
+function serverErrorResponse(error1, error) {
+    return response.serverError(message, error);
+}
+
+function successResponse(message, res){
+    return response.success(message, res)
+}
+
+function successResponseAddition(message, res, dataBaru, valueDataBaru){
+    return response.success(message, res, dataBaru, valueDataBaru)
+}
+
+function userErrorResponse(message, res){
+    return response.failed(message, res)
+}
 
 // menampilkan saldo user
 exports.tampilSaldo = function (req, res){
-    var token = req.headers.authorization
+    var token = req.headers.authorization;
+    var data = parsetoken(token)
 
-    var tokenparsed = parsetoken(token)
-
-    var data = tokenparsed.rows[0];
-
-    connection.query('SELECT * FROM daftar_client WHERE id_client = ?', [data.id_client], function(error, rows, fields){
+    conn.query('SELECT * FROM daftar_client WHERE id_client = ?', [data.id_client], function(error, rows, fields){
         if(error){
-            console.log(error);
+            return serverErrorResponse(error1, error);
         } else {
             res.json({
-                user_name: rows[0].user_name,
-                saldo: rows[0].saldo
+                id_user: rows[0].id_client,
+                name: rows[0].nama_client,
+                pass: rows[0].password,
+                email: rows[0].email,
+                jumlah: rows[0].saldo,
+                nomor_wallet: rows[0].nomor_wallet
             })
         }
     });
@@ -29,55 +48,68 @@ exports.tampilSaldo = function (req, res){
 // TOP UP - JUMLAH
 exports.topUp = function(req,res){
     var token = req.headers.authorization;
-    var tokenparsed = parsetoken(token);
+    var data = parsetoken(token);
 
-    var data = tokenparsed.rows[0];
     var saldo = req.body.saldo;
 
-    if(saldo <= 0){ 
-        return res.status(400).json({
-            message: "Jumlah top up harus lebih dari Rp 0"
-        })
-    }
+    var idTopUp = req.params.id;
 
-    // update table daftar_client
-    var query = ("UPDATE daftar_client SET saldo = daftar_client.saldo + ? WHERE id_client = ?");
-    var table = [saldo, data.id_client];
+    if (idTopUp == data.id_client || data.role == 1){
+        if(saldo <= 0){ 
+            return userErrorResponse("Saldo top up harus lebih dari 0", res)
+        }
 
-    query = mysql.format(query, table);
-
-    conn.query(query, function(error, result, fields){
-        if (error) throw error;
-
-        // Update table top up 
-        var queryTopUp = ("INSERT INTO topup(id_client, jumlah_topUp, status) VALUES (?, ?, ?)")
-        var dataTopUp = [data.id_client, saldo, true]
-
-        queryTopUp = mysql.format(queryTopUp, dataTopUp)
-
-        conn.query(queryTopUp, function(error, rows, fields){
-            if(error) throw error;
-        })
-
-        conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [data.id_client], function (error, rows, fields){
-            if(error){
-                throw error;
-            } else {
-                res.json({
-                    message: "Top up berhasil",
-                    saldo: rows[0].saldo
-                })
+        conn.query("SELECT * FROM daftar_client WHERE id_client = ?", [idTopUp], function(error, rows, fields){
+            console.log(rows.length)
+    
+            if (error) return serverErrorResponse(error1, error);
+    
+            if(rows.length == 0){
+                return userErrorResponse("User tidak ditemukan", res)
             }
         })
-    })
-};
+    
+        // update table daftar_client
+        var query = ("UPDATE daftar_client SET saldo = daftar_client.saldo + ? WHERE id_client = ?");
+        var table = [saldo, idTopUp];
+
+        query = mysql.format(query, table);
+
+        conn.query(query, function(error, result, fields){
+            if (error) return serverErrorResponse(error1, error);
+
+            // Insert to table top up 
+            var queryTopUp = ("INSERT INTO topup(id_client, jumlah_topUp, status) VALUES (?, ?, ?)")
+            var dataTopUp = [idTopUp, saldo, true]
+
+            queryTopUp = mysql.format(queryTopUp, dataTopUp)
+
+            conn.query(queryTopUp, function(error, rows, fields){
+                if(error) return serverErrorResponse(error1, error);
+            })
+
+            conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [idTopUp], function (error, rows, fields){
+                if(error){
+                    return serverErrorResponse(error1, error);
+                } else {
+                    res.json({
+                        status: 200,
+                        message: "Top up berhasil",
+                        id_user: idTopUp,
+                        saldo: rows[0].saldo
+                    })
+                }
+            })
+        })
+    } else {
+        return userErrorResponse("Anda tidak dapat mengakses halaman ini", res)
+    }
+}
 
 // TRANSFER - penerima, jumlah, beritaAcara
 exports.transfer = function(req, res){
     var token = req.headers.authorization;
-    var tokenparsed = parsetoken(token);
-
-    var dataDatabase = tokenparsed.rows[0];
+    var dataDatabase = parsetoken(token);
 
     var dataPostman = {
         penerima: req.body.penerima,
@@ -86,17 +118,13 @@ exports.transfer = function(req, res){
     };
 
     // Penerima kosong
-    if(dataPostman.penerima == ""){
-        return res.status(400).json({
-            message: "Penerima tidak boleh kosong"
-        })
+    if(dataPostman.penerima == null){
+        return userErrorResponse("Penerima tidak boleh kosong", res)
     }
 
     // Jumlah gaada
     if(dataPostman.jumlah <= 0){
-        return res.status(400).json({
-            message: "Uang yang ditransfer harus lebih dari Rp 0"
-        })
+        return userErrorResponse("Jumlah yang ditransfer harus lebih dari 0", res)
     }
 
     // Query untuk masukkan ke dalam database transaksi
@@ -115,6 +143,8 @@ exports.transfer = function(req, res){
     var statusFailed = false;
 
     conn.query(selectReceiver, function(error, result, fields){
+        if (error) return serverErrorResponse(error1, error)
+        
         // Penerima tidak ditemukan
         if(result.length != 1){
             return res.status(400).json({
@@ -138,22 +168,18 @@ exports.transfer = function(req, res){
 
         // Penerima & saldonya ada
         conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [idPengirim], function(error, rows, fields){
-            if (error) throw error;
+            if (error) return serverErrorResponse(error1, error);
             
             // Penerimanya diri sendiri
             if(idPenerima == idPengirim){
-                return res.status(400).json({
-                    message: "Tidak dapat mengirim ke diri sendiri"
-                })
+                return userErrorResponse("Tidak dapat transfer ke diri sendiri", res);
             }
 
             // Uangnya kurang
             if (rows[0].saldo < dataPostman.jumlah){
                 conn.query(queryTransaksi)
                 
-                return res.status(400).json({
-                    message: "Mohon maaf saldo anda tidak cukup"
-                })
+                return userErrorResponse("Saldo anda tidak mencukupi", res)
             }
             
             // Uangnya cukup
@@ -164,18 +190,15 @@ exports.transfer = function(req, res){
 
                 querySender = mysql.format(querySender, tableSender)
 
-                conn.query(querySender, function(error, hasil, fields){
-                    console.log ("Id_pengirim = " + idPengirim)
-                    
+                conn.query(querySender, function(error, hasil, fields){                    
                     if(error){
-                        throw error;
+                        return serverErrorResponse(error1, error);
                     } else {
-                        res.json({
-                            message: "Transfer berhasil",
-                            jumlah: (rows[0].saldo - dataPostman.jumlah)
-                        })
+                        var jumlah = rows[0].saldo - dataPostman.jumlah
+                        successResponseAddition("Transfer berhasil", res, "saldo", jumlah)
                     }
-                })
+                    })
+                }})
 
                 // Menambah saldo penerima
                 var queryReceiver = ("UPDATE daftar_client SET saldo = (saldo + ?) WHERE id_client = ?")
@@ -184,9 +207,7 @@ exports.transfer = function(req, res){
                 queryReceiver = mysql.format(queryReceiver, tableReceiver)
 
                 conn.query(queryReceiver, function(error, rows, fields){
-                    if(error) throw error;
-                    console.log("Id penerima: " + idPenerima)
-                    console.log("Transfer berhasil")
+                    serverErrorResponse(error1, error);
                 })
 
                 var queryTransaksiSuccess = ("INSERT INTO transaksi(id_pengirim, id_penerima, tanggal, jam, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -202,27 +223,25 @@ exports.transfer = function(req, res){
                 queryTransaksiSuccess = mysql.format(queryTransaksiSuccess, dataTransaksiSuccess)
                 console.log(queryTransaksiSuccess)
 
-                conn.query(queryTransaksiSuccess)
-            }
-        })
-    })
-}
+                conn.query(queryTransaksiSuccess, function(error, rows, fields){
+                    if(error) return serverErrorResponse(error1, error);
+                })
+        }
+)}
 
 // POST BAYAR 
 exports.bayar = function(req, res){
     var token = req.headers.authorization;
-    var tokenparsed = parsetoken(token);
-
-    var dataDatabase = tokenparsed.rows[0];
+    var dataDatabase = parsetoken(token);
     
 }
 
 // GET HISTORY
 exports.history = function(req, res){
     var token = req.headers.authorization;
-    var tokenparsed = parsetoken(token);
+    var dataDatabase = parsetoken(token);
 
-    var dataDatabase = tokenparsed.rows[0];
+    var idClient = dataDatabase.id_client
 
-
+    historyTransfer(idClient)
 }

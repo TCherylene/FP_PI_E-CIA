@@ -1,9 +1,14 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/secret');
+var response = require('../res');
+
+function userErrorResponse(message, res){
+    return response.failed(message, res)
+}
 
 function verifikasi(){
     return function(req, rest, next){
-        //cek authorizzation header
+        //cek authorization header
         var tokenWithBearer = req.headers.authorization;
         
         if(tokenWithBearer) {
@@ -12,13 +17,15 @@ function verifikasi(){
             //verifikasi
             jwt.verify(token, config.secret, function(err, decoded){
                 if(err){
-                    return rest.status(401).send({auth:false, message:'Token tidak terdaftar!'});
+                    // Token salah
+                    return userErrorResponse("Token tidak valid", rest)
                 }else {
+                    // Token benar
                     next()
                 }
             });
         }else {
-            return rest.status(401).send({auth:false, message:'Token tidak tersedia!'});
+            return userErrorResponse("Masukkan token", rest)
         }
     }
 }

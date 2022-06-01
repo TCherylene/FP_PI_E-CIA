@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 31 Bulan Mei 2022 pada 03.01
+-- Waktu pembuatan: 01 Jun 2022 pada 16.33
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -45,25 +45,22 @@ CREATE TABLE `bayar` (
 
 CREATE TABLE `daftar_client` (
   `id_client` int(11) NOT NULL,
-  `nama_client` varchar(50) NOT NULL,
-  `user_name` varchar(50) NOT NULL,
-  `no_hp` int(11) NOT NULL,
+  `nama_client` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL,
   `password` text NOT NULL,
-  `saldo` int(11) NOT NULL
+  `nomor_wallet` text NOT NULL,
+  `saldo` int(11) NOT NULL,
+  `role` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `daftar_client`
 --
 
-INSERT INTO `daftar_client` (`id_client`, `nama_client`, `user_name`, `no_hp`, `password`, `saldo`) VALUES
-(9, 'Cher', 'HAIII', 123, '202cb962ac59075b964b07152d234b70', 1107),
-(10, 'Cher', 'Hellow', 123, '81dc9bdb52d04dc20036dbd8313ed055', 104883),
-(11, 'Cher', 'Hellllo', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
-(12, 'Cher', 'CHerylene', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
-(13, 'Cher', 'HEHE', 123, '81dc9bdb52d04dc20036dbd8313ed055', 9000),
-(14, 'Cher', 'Manura', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0),
-(15, 'Cher', 'Manura-', 123, '81dc9bdb52d04dc20036dbd8313ed055', 0);
+INSERT INTO `daftar_client` (`id_client`, `nama_client`, `email`, `password`, `nomor_wallet`, `saldo`, `role`) VALUES
+(1, 'Manura', 'manura@manura.com', '81dc9bdb52d04dc20036dbd8313ed055', '54ac17782fe813a6fe21a0d5133cc744', 10000, 1),
+(2, 'Alda', 'alda@alda.com', '81dc9bdb52d04dc20036dbd8313ed055', '20c7dd637bcdeef433589d1321f52363', 0, 1),
+(3, 'Ira', 'ira@ira.com', '81dc9bdb52d04dc20036dbd8313ed055', '87823d8de907cd4a582dee291d146f92', 60000, 1);
 
 -- --------------------------------------------------------
 
@@ -96,8 +93,14 @@ CREATE TABLE `topup` (
 --
 
 INSERT INTO `topup` (`id_topUp`, `id_client`, `jumlah_topUp`, `status`) VALUES
-(1, 10, 5000, 1),
-(2, 10, 100000, 1);
+(11, 3, 5000, 1),
+(12, 3, 5000, 1),
+(13, 3, 5000, 1),
+(14, 3, 5000, 1),
+(15, 3, 5000, 1),
+(16, 3, 5000, 1),
+(17, 1, 5000, 1),
+(18, 1, 5000, 1);
 
 -- --------------------------------------------------------
 
@@ -115,15 +118,6 @@ CREATE TABLE `transaksi` (
   `berita_acara` varchar(200) NOT NULL,
   `status` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `transaksi`
---
-
-INSERT INTO `transaksi` (`id_transaksi`, `id_pengirim`, `id_penerima`, `tanggal`, `jam`, `nominal`, `berita_acara`, `status`) VALUES
-(27, 10, 9, '2022-05-30', '12:05:32', 10, 'halo ini percobaan keempat', 1),
-(28, 10, 9, '2022-05-30', '12:07:41', 10, 'halo ini percobaan keempat', 1),
-(29, 10, 9, '2022-05-30', '12:08:03', 1000, 'halo ini percobaan kelima', 1);
 
 --
 -- Indexes for dumped tables
@@ -178,7 +172,7 @@ ALTER TABLE `bayar`
 -- AUTO_INCREMENT untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `daftar_client_layanan`
@@ -190,13 +184,13 @@ ALTER TABLE `daftar_client_layanan`
 -- AUTO_INCREMENT untuk tabel `topup`
 --
 ALTER TABLE `topup`
-  MODIFY `id_topUp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_topUp` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
