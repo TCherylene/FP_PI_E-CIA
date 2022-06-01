@@ -59,7 +59,7 @@ exports.topUp = function(req,res){
             }
         })
     })
-}
+};
 
 
 // //menampilkan semua data mahasiswa

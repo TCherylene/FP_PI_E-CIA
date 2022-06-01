@@ -24,8 +24,9 @@
         <div class="login-form">
           <form method="POST" action="add_register.php" onsubmit="return formValidation()">
             <input type="name" placeholder="Name">
-            <input type="username" placeholder="Username">
-            <input type="noHp" placeholder="No HP">
+            <input type="email" placeholder="Email">
+            <!-- <input type="username" placeholder="Username">
+            <input type="noHp" placeholder="No HP"> -->
             <input type="password" placeholder="Password">
             <p>Sudah punya akun? <a href="login.html">Login</a></p>
             <div class='row'></div>
@@ -41,12 +42,13 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
 <script>
   const nama_clientlInputEl = document.querySelector(".nama_client-input-validate");
-  const user_namelInputEl = document.querySelector(".user_name-input-validate");
-  const no_hplInputEl = document.querySelector(".no_hp-input-validate");
+  const email_clientlInputEl = document.querySelector(".email_client-input-validate");
+  // const user_namelInputEl = document.querySelector(".user_name-input-validate");
+  // const no_hplInputEl = document.querySelector(".no_hp-input-validate");
   const passwordInputEl = document.querySelector(".password-input-validate");
 
   function formValidation() {
-    if (nama_clientInputEl.value == "" ||user_nameInputEl.value == "" ||no_hpInputEl.value == "" || passwordInputEl.value == "") {
+    if (nama_clientInputEl.value == "" ||user_emailInputEl.value == ""  || passwordInputEl.value == "") {
       alert("Please complete the data first!");
       return false;
     }
