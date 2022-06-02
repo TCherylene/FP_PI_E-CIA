@@ -1,16 +1,5 @@
 'use strict';
 
-exports.successWithAdditionalInfo = function successWithAdditionalInfo(message, res, dataBaru, valueDataBaru){
-    var data = {
-        "status": 200,
-        "message": message,
-        [dataBaru]: valueDataBaru
-    }
-
-    res.json(data);
-    res.end()
-}
-
 exports.success = function(message, res){
     var data = {
         "status":200,
@@ -36,7 +25,7 @@ exports.serverError = function(message, res){
         "status": 500,
         "message": "Server Error"
     }
-    
+
     res.json(data);
     res.end();
 }
@@ -46,6 +35,7 @@ exports.oknested = function(values, res){
     //lakukan akumulasi
     const hasil = values.reduce((akumulasikan, item)=>{
         //tentukan key group
+        // kalau ada nama yang sama
         if(akumulasikan[item.nama]){
             //buat variabel group nama mahasiswa
             const group = akumulasikan[item.nama];
@@ -57,6 +47,7 @@ exports.oknested = function(values, res){
                 group.matakuliah = [group.matakuliah, item.matakuliah];
             }
         }else {
+            // kalau gaada yang sama
             akumulasikan[item.nama] = item;
         }
         return akumulasikan;
@@ -71,3 +62,37 @@ exports.oknested = function(values, res){
      res.end();
 
 }
+
+
+/* Response yang diinginkan */
+/* 
+    {
+        "transfer":[
+            {
+                ...
+            },
+            {
+                ...
+            }
+        ],
+
+        "bayar":[
+            {
+                ...
+            },
+            {
+                ...
+            }
+        ],
+
+        "top up":[
+            {
+                ...
+            },
+            {
+                ...
+            }
+        ]
+
+    }
+*/

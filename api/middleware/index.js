@@ -16,11 +16,13 @@ router.get('/profile', verifikasi(), jsonku.tampilSaldo);
 // PUT profile - Sebelumnya: top up
 router.put('/profile/:id', verifikasi(), jsonku.topUp);
 
-
-router.post('/transfer', verifikasi(), jsonku.transfer);
-router.get('/riwayat', verifikasi(), jsonku.history);
-
 // POST pembelian - Sebelumnya: bayar
 router.post('/pembelian', verifikasi(), jsonku.bayar);
+
+// POST Transfer
+router.post('/transfer', verifikasi(), jsonku.transfer);
+
+// GET History
+router.get('/riwayat', verifikasi(), jsonku.history);
 
 module.exports = router;

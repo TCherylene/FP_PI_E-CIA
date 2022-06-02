@@ -4,12 +4,15 @@ var response = require('../res');
 var parsetoken = require('./parseJWT');
 const conn = require('../koneksi');
 var mysql = require('mysql');
-var historyTransfer = require('../history/historyTransfer')
+var updateSaldo = require('./update_saldo')
+var cekData = require('./cek_data')
 
 var error1 = "hello";
+var statusSuccess = true;
+var statusFailed = false;
 
 function serverErrorResponse(error1, error) {
-    return response.serverError(message, error);
+    return response.serverError(error1, error);
 }
 
 function successResponse(message, res){
@@ -49,12 +52,14 @@ exports.topUp = function(req,res){
     var saldo = req.body.saldo;
 
     var idTopUp = req.params.id;
+    var idPengirim = data.id_client;
 
     if (idTopUp == data.id_client || data.role == 1){
         if(saldo <= 0){ 
             return userErrorResponse("Saldo top up harus lebih dari 0", res)
         }
 
+        // User tidak ada
         conn.query("SELECT * FROM daftar_client WHERE id_client = ?", [idTopUp], function(error, rows, fields){
             console.log(rows.length)
     
@@ -65,56 +70,43 @@ exports.topUp = function(req,res){
             }
         })
     
-        // update table daftar_client
-        var query = ("UPDATE daftar_client SET saldo = daftar_client.saldo + ? WHERE id_client = ?");
-        var table = [saldo, idTopUp];
+        updateSaldo(idTopUp, saldo)
+        
+        // Insert to table top up 
+        var queryTopUp = ("INSERT INTO topup(id_client, id_pengirim, jumlah_topUp, status) VALUES (?, ?, ?, ?)")
+        var dataTopUp = [idTopUp, idPengirim, saldo, true]
 
-        query = mysql.format(query, table);
+        queryTopUp = mysql.format(queryTopUp, dataTopUp)
 
-        conn.query(query, function(error, result, fields){
-            if (error) return serverErrorResponse(error1, error);
-
-            // Insert to table top up 
-            var queryTopUp = ("INSERT INTO topup(id_client, jumlah_topUp, status) VALUES (?, ?, ?)")
-            var dataTopUp = [idTopUp, saldo, true]
-
-            queryTopUp = mysql.format(queryTopUp, dataTopUp)
-
-            conn.query(queryTopUp, function(error, rows, fields){
-                if(error) return serverErrorResponse(error1, error);
-            })
-
-            conn.query("SELECT id_client, saldo FROM daftar_client WHERE id_client = ?", [idTopUp], function (error, rows, fields){
-                if(error){
-                    return serverErrorResponse(error1, error);
-                } else {
-                    res.json({
-                        status: 200,
-                        message: "Top up berhasil",
-                        id_user: idTopUp,
-                        saldo: rows[0].saldo
-                    })
-                }
-            })
+        conn.query(queryTopUp, function(error, rows, fields){
+            if(error) return serverErrorResponse(error1, error);
+            else{
+                res.json({
+                    status: 200,
+                    message: "Top up berhasil",
+                    id_user: idTopUp,
+                    saldo: cekData(idTopUp).saldo
+                })
+            }
         })
+
     } else {
         return userErrorResponse("Anda tidak dapat mengakses halaman ini", res)
     }
 }
 
-// TRANSFER - penerima, jumlah, beritaAcara
+// TRANSFER - penerima, jumlah
 exports.transfer = function(req, res){
     var token = req.headers.authorization;
     var dataDatabase = parsetoken(token);
 
     var dataPostman = {
-        penerima: req.body.penerima,
-        jumlah: req.body.jumlah,
-        beritaAcara: req.body.beritaAcara
+        email: req.body.email,
+        jumlah: parseInt(req.body.jumlah),
     };
 
     // Penerima kosong
-    if(dataPostman.penerima == null){
+    if(dataPostman.email == null){
         return userErrorResponse("Penerima tidak boleh kosong", res)
     }
 
@@ -123,25 +115,21 @@ exports.transfer = function(req, res){
         return userErrorResponse("Jumlah yang ditransfer harus lebih dari 0", res)
     }
 
-    // Query untuk masukkan ke dalam database transfer
-    var selectReceiver = ("SELECT id_client, user_name FROM daftar_client WHERE user_name = ?");
-    var dataSelectReceiver = [dataPostman.penerima];
-
+    // Query untuk mencari receiver
+    var selectReceiver = ("SELECT id_client, email FROM daftar_client WHERE email = ?");
+    var dataSelectReceiver = [dataPostman.email];
+    
     selectReceiver = mysql.format(selectReceiver, dataSelectReceiver);
-
-    var querytransfer = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
-
-    var statusSuccess = true;
-    var statusFailed = false;
+    
+    // Query untuk masukkan ke dalam database transfer
+    var querytransfer = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, status) VALUES (?, ?, ?, ?)");
 
     conn.query(selectReceiver, function(error, result, fields){
         if (error) return serverErrorResponse(error1, error)
         
         // Penerima tidak ditemukan
         if(result.length != 1){
-            return res.status(400).json({
-                message: "Penerima tidak ditemukan"
-            })
+            return userErrorResponse("Penerima tidak ditemukan", res)
         }
 
         var idPengirim = dataDatabase.id_client;
@@ -150,7 +138,6 @@ exports.transfer = function(req, res){
         const dataMasuktransfer = [idPengirim,
                                     idPenerima,
                                     dataPostman.jumlah,
-                                    dataPostman.beritaAcara,
                                     statusFailed
                                 ]
 
@@ -175,52 +162,96 @@ exports.transfer = function(req, res){
             // Uangnya cukup
             else if (rows[0].saldo >= dataPostman.jumlah){
                 // Mengurangi saldo pengirim
-                var querySender = ("UPDATE daftar_client SET saldo = (saldo - ?) WHERE id_client = ?")
-                var tableSender = [dataPostman.jumlah, idPengirim]
-
-                querySender = mysql.format(querySender, tableSender)
-
-                conn.query(querySender, function(error, hasil, fields){                    
-                    if(error){
-                        return serverErrorResponse(error1, error);
-                    } else {
-                        successResponse("Transfer berhasil", res);
-                    }
-                    })
-                }})
+                updateSaldo(idPengirim, dataPostman.jumlah * (-1));
 
                 // Menambah saldo penerima
-                var queryReceiver = ("UPDATE daftar_client SET saldo = (saldo + ?) WHERE id_client = ?")
-                var tableReceiver = [dataPostman.jumlah, idPenerima]
-
-                queryReceiver = mysql.format(queryReceiver, tableReceiver)
-
-                conn.query(queryReceiver, function(error, rows, fields){
-                    serverErrorResponse(error1, error);
-                })
-
+                updateSaldo(idPenerima, dataPostman.jumlah);
+                
                 // Masukkan ke dalam tabel transfer
-                var querytransferSuccess = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, berita_acara, status) VALUES (?, ?, ?, ?, ?)");
-                var datatransferSuccess = [idPengirim,
-                                            idPenerima,
-                                            dataPostman.jumlah,
-                                            dataPostman.beritaAcara,
-                                            statusSuccess
-                ]
-
+                var querytransferSuccess = ("INSERT INTO transfer(id_pengirim, id_penerima, nominal, status) VALUES (?, ?, ?, ?);");
+                var datatransferSuccess = [idPengirim, idPenerima, dataPostman.jumlah, statusSuccess]
+    
                 querytransferSuccess = mysql.format(querytransferSuccess, datatransferSuccess)
-
-                conn.query(querytransferSuccess, function(error, rows, fields){
-                    if(error) return serverErrorResponse(error1, error);
+                
+                conn.query(querytransferSuccess, function(error, hasil, fields){
+                    if (error) return serverErrorResponse(error1, error);
+                    else {
+                        return successResponse("Transfer berhasil", res);
+                    }
                 })
-        }
+            }
+        })
+    }
 )}
 
 // POST BAYAR 
 exports.bayar = function(req, res){
     var token = req.headers.authorization;
     var dataDatabase = parsetoken(token);
+
+    var id_user = req.body.id_user
+
+    // Ambil id user
+    if (req.body.id_user == null){
+        id_user = dataDatabase.id_client;
+    }
+
+    var dataPostman = {
+        id_user: id_user,
+        nama_barang: req.body.nama_barang,
+        harga: parseInt(req.body.harga),
+        wallet: req.body.wallet,
+        nomor_wallet: req.body.nomor_wallet
+    };
+    // nama_barang -> layanan
+    // wallet: memilih e wallet yang mana
+    // nomor wallet: dari get profile
     
+    // Barang & harga nya kosong
+    if(dataPostman.nama_barang == null || dataPostman.harga == null){
+        return userErrorResponse("Nama_barang dan harga tidak boleh kosong", res)
+    }
+
+    // Ngecek Nomor Wallet (kalau tidak ada nomor wallet)
+    if(dataPostman.nomor_wallet == null){
+        return userErrorResponse("Masukkan nomor_wallet", res)
+    }
+    
+    // Query untuk table bayar
+    var queryBayar = "INSERT INTO bayar (id_client, nomor_wallet, layanan, jumlah_pembayaran, status) VALUES (?, ?, ?, ?, ?)"
+    var tableBayarFailed = [id_user, dataPostman.nomor_wallet, dataPostman.nama_barang, dataPostman.harga, statusFailed]
+
+    var queryBayarFailed = mysql.format(queryBayar, tableBayarFailed);
+
+    // Query untuk ngecek nomor wallet
+    var queryWallet = "SELECT id_client, nomor_wallet FROM daftar_client WHERE id_client = ? AND nomor_wallet = ?"
+    var dataWallet = [id_user, dataPostman.nomor_wallet]
+
+    var queryWallet = mysql.format(queryWallet, dataWallet);
+
+    conn.query(queryWallet, function(error, rows, next){
+        if (error) throw error;
+        // nomor wallet salah
+        if (rows.length == 0){
+            conn.query(queryBayarFailed)
+
+            return userErrorResponse("Nomor wallet salah", res)
+        } 
+
+        // nomor wallet benar
+        else { 
+            updateSaldo(id_user, (-1) * dataPostman.harga)
+            var tableBayarSuccess = [id_user, dataPostman.nomor_wallet, dataPostman.nama_barang, dataPostman.harga, statusSuccess]
+            var queryBayarSuccess = mysql.format(queryBayar, tableBayarSuccess)
+            
+            conn.query(queryBayarSuccess, function(error, rows, fields){
+                if(error) throw error;
+                else{
+                    return successResponse("Pembayaran berhasil", res);
+                }
+            })
+        }
+    })
 }
 
 // GET HISTORY
@@ -230,5 +261,49 @@ exports.history = function(req, res){
 
     var idClient = dataDatabase.id_client
 
-    historyTransfer(idClient)
+    // // Transfer
+    // var queryHistoryTransfer = "SELECT * FROM transfer WHERE id_pengirim = ? OR id_penerima = ?"
+    // var tableHistoryTransfer = [idClient, idClient]
+
+    // queryHistoryTransfer = mysql.format(queryHistoryTransfer, tableHistoryTransfer)
+    
+    // conn.query(queryHistoryTransfer, function(error, rows, fields){
+    //     if (error) throw error;
+
+    //     if(rows.length == 0){
+    //         res.status(200).json({
+    //             status: 200,
+    //             message: "Tidak ada data"
+    //         })
+    //     }
+
+    //     console.log(rows);
+    // })
+
+    // Bayar
+    var queryHistoryBayar = "SELECT id_client, nomor_wallet, layanan, jumlah_pembayaran, tanggal, waktu, status  FROM bayar WHERE id_client = ?"
+    var tableHistoryBayar = [idClient]
+
+    queryHistoryBayar = mysql.format(queryHistoryBayar, tableHistoryBayar)
+
+    conn.query(queryHistoryBayar, function(error, rows, fields){
+        if(error) throw error;
+
+        if(rows.length == 0){
+            res.status(200).json({
+                status:200,
+                message: "Tidak ada data"
+            })
+        }
+
+        let data = rows
+        
+        // empty array to store the data
+        let testData = [];
+        data.forEach(element => {
+              testData.push(element)
+        });
+
+        console.log(testData)
+    })
 }
