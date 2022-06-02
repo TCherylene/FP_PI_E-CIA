@@ -4,9 +4,10 @@ nav{
 }
 
 img{
-  display: block;
+  display: block; 
 }
-
+.pt-50{ margin: top 50px;
+}
 #navbarNavAltMarkup{
   margin: 0px;
   padding: 0px;
@@ -378,4 +379,5 @@ img {
   .forget-pass a:hover::after {
     opacity: 1;
   }
+
 }
