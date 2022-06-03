@@ -1,110 +1,228 @@
 # API E-CIA
 
-API ini untuk e-money dari kelompok 5 yang bernamakan E-CIA.
+API ini untuk e-money dari kelompok 5 kelas A yang bernamakan E-CIA.
 
-API E-CIA tersedia pada: `https://api-ecia.herokuapp.com`
+API E-CIA tersedia pada: `https://api-ecia.herokuapp.com/api`
 
-## Endpoints - Without Authentication
+## Kelompok 5
 
-Endpoint yang **tidak** memerlukan authentication untuk mengakses
+* Alda Risma Harjian 5027201004
+* Sharira Saniane 5027201016
+* Cherylene Trevina 50270201033
+
+## Daftar Endpoints
+
+Hal-hal yang bisa dilakukan dalam API E-CIA:
+
+| Method | Endpoint | Dokumentasi | Deskripsi |
+| :---: | --- | :---: | --- |
+| POST | /profile | [register](#register) | Untuk melakukan registrasi akun |
+| POST | /login | [login](#login) | Untuk masuk ke akun dan mendapatkan token |
+| GET | /profile | [cek-profil](#cek-profil) |Untuk mendapatkan informasi akun (id, nama, email, pass, jumlah, nomor_wallet) |
+| PUT | /profile/:id | [top up](#top-up) | Untuk melakukan top up |
+| POST | /pembelian | [pembelian](#pembelian) | Untuk melakukan pembayaran terhadap suatu barang/layanan |
+| POST | /transfer | [transfer](#transfer) | Untuk melakukan transfer kepada user lain |
+| GET | /riwayat | [riwayat](#riwayat--history) | Untuk menampilkan history transaksi |
+
+## Endpoints
 
 ### Register
 
-POST `/profile`
+`POST` https://api-ecia.herokuapp.com/api/profile
 
-Body (JSON):
+Properties:
 
-- name
-- email
-- pass
+* Params: -
+* Authorization: -
+* Body (JSON):
 
-> Untuk mendaftarkan akun di dalam database E-CIA
+| Object | Keterangan |
+| --- | --- |
+| email | Email yang digunakan untuk mendaftar (tidak boleh sama dengan user lain) |
+| pass | Password akun (tidak ada ketentuan) |
+| name | Nama dari user (menggunakan **`name`** bukan `nama`)|
 
+#### Contoh 1: (Email baru)
+
+Body:
+
+```json
+{
+    "name": "Test",
+    "email":"test@test.com",
+    "pass": "test1234"
+}
+```
+
+Response:
+
+![Response email baru](https://user-images.githubusercontent.com/77750276/171909287-5958ee20-88eb-4cd6-8c32-9f6b78825cb4.png)
+
+#### Contoh 2: (Email sudah ada)
+
+Body: 
+
+```json
+{
+    "name": "Test",
+    "email":"test@test.com",
+    "pass": "test1234"
+}
+```
+
+Response:
+
+![Email sudah ada](https://user-images.githubusercontent.com/77750276/171909570-464cf5cf-7102-44d2-9863-e2f7f9d5b4b9.png)
+
+---
 ### Login
 
-POST `/login`
+`POST` https://api-ecia.herokuapp.com/api/login
 
-Body (JSON):
+Properties:
 
-- email
-- pass
+* Params: -
+* Authorization: -
+* Body (JSON):
 
-> Untuk masuk/login ke dalam akun yang telah terdaftar
+| Object | Keterangan |
+| --- | --- |
+| email | Email yang digunakan untuk mendaftar (tidak boleh sama dengan user lain) |
+| pass | Password akun (tidak ada ketentuan) |
 
-## Endpoints - With Authentication
+#### Contoh 1: (Email ditemukan)
 
-Endpoint yang memerlukan authentication untuk mengakses. Lakukan [login](#login) untuk mendapatkan token.
+Body:
 
-Headers:
+```json
+{
+    "email":"test@test.com",
+    "pass": "test1234"
+}
+```
 
-**Authorization:** `BEARER <token>`
+Response:
+
+![email ditemukan](https://user-images.githubusercontent.com/77750276/171910053-38d9e219-8521-4512-8c24-82fd6297688d.png)
+
+#### Contoh 2: (Email tidak ditemukan)
+
+Body:
+
+```json
+{
+    "email":"test1234@test.com",
+    "pass": "test1234"
+}
+```
+
+Response:
+
+![Email tidak ditemukan](https://user-images.githubusercontent.com/77750276/171909880-bc87d882-033b-4a4a-86cd-c74e89543bac.png)
+
+---
 
 ### Cek Profil
 
-GET `/profile`
+`GET` https://api-ecia.herokuapp.com/api/profile
 
-> Untuk mendapatkan informasi terkait profil user
+Properties:
+
+* Params: -
+* Authorization: `BEARER <token>`
+* Body (JSON): -
+
+Contoh response:
+![Cek profile](https://user-images.githubusercontent.com/77750276/171910592-094993e1-b377-452c-8906-d211ce9924c0.png)
+
+---
 
 ### Top Up
 
-PUT `/profile/:id`
+`PUT` https://api-ecia.herokuapp.com/api/profile/:id
 
-Body(JSON):
+Properties:
 
-- saldo
+* Params: `id`
+    > Top up untuk id berbeda hanya bisa dilakukan oleh admin
+* Authorization: `BEARER <token>`
+* Body (JSON):
 
-> Untuk melakukan top up pada akun user
->
-> Parameter `id` berfungsi sebagai user yang menerima top up
->
-> - Untuk admin dapat melakukan top up pada user lain & dapat bernilai negatif
-> - Untuk user *hanya* dapat melakukan top up pada diri sendiri & harus bernilai positif
+| Object | Keterangan |
+| --- | --- |
+| jumlah | Jumlah saldo yang ingin ditambahkan kepada user dengan id yang dimasukkan ke dalam params |
+
+> * User harus memasukkan nilai positif (lebih dari 0)
+> * Admin dapat memasukkan nilai negatif
+
+#### Response yang dapat diterima
+
+| Status | Message | Keterangan Tambahan |
+| :---: | --- | --- |
+| 200 | Top Up berhasil | - |
+| 400 | Saldo top up harus lebih dari 0 | Status ini hanya bisa didapatkan oleh user |
+| 400 | User tidak ditemukan | - |
+| 400 | Anda tidak dapat mengakses halaman ini | User ingin melakukan top up kepada user lain |
+| 500 | Server Error | - |
+
+---
 
 ### Transfer
 
-POST `/transfer`
+`POST` https://api-ecia.herokuapp.com/api/transfer
 
-Body(JSON):
+Properties
 
-- email
-- jumlah
+* Params: -
+* Authorization: `BEARER <token>`
+* Body (JSON):
 
-> Untuk melakukan transfer ke user lain
->
-> Body `email` berfungsi sebagai user yang menerima top up
->
-> - User dan admin **tidak** dapat melakukan transfer ke diri sendiri
-> - Tidak dapat melakukan transfer dengan jumlah <= 0
-> - Saldo user dan admin harus melebihi jumlah transfer (Akan gagal jika tidak memenuhi)
+| Object | Keterangan |
+| --- | --- |
+| email | Email penerima |
+| jumlah | Jumlah saldo yang ingin ditambahkan kepada user dengan email yang telah dimasukkan (Nilai yang dimasukkan harus positif) |
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| :---: | --- |
+| 200 | Transfer berhasil |
+| 400 | Penerima tidak boleh kosong |
+| 400 | Jumlah yang ditransfer harus lebih dari 0 |
+| 400 | Penerima tidak ditemukan |
+| 400 | Tidak dapat transfer ke diri sendiri |
+| 400 | Saldo anda tidak mencukupi |
+| 500 | Server Error |
+
+---
 
 ### Pembelian
 
-POST `/pembelian`
+`POST` https://api-ecia.herokuapp.com/api/pembelian
 
-Body(JSON):
+Properties
 
-- id_user (opsional)
-- nama_barang
-- harga
-- nomor_wallet
+* Params: -
+* Authorization: `BEARER <token>`
+* Body (JSON):
 
-> Untuk melakukan pembelian terhadap suatu produk
->
-> Body `nomor_wallet` merupakan nomor rekening user di dalam E-CIA, untuk mendapatkan `nomor_wallet` dapat dilakukan [di sini](#cek-profil)
->
-> Selain `id_user`, hal-hal lain bersifat wajib
+| Object | Keterangan |
+| --- | --- |
+| id_user | Id user yang ingin melakukan pembayaran (opsional)|
+| nama_barang | Nama barang/layanan yang ingin dibayar |
+| harga | Harga dari barang/layanan yang ingin dibayar | 
+| nomor_wallet | Nomor wallet dari user |
+
+> `nomor_wallet` dapat didapatkan [di sini](#cek-profil)
+
+---
 
 ### Riwayat / History
 
-GET `/riwayat`
+`GET` https://api-ecia.herokuapp.com/api/riwayat
 
-> Untuk mendapatkan history apa saja yang telah dilakukan user (pembayaran, transfer, atau top up)
+Properties
 
-## Responses
-
-Status
-| Status | Arti |
-| --- | --- |
-| 200 | Sukses |
-| 400 | Terdapat kesalahan input dari user |
-| 500 | Server Error |
+* Params: -
+* Authorization: `BEARER <token>`
+* Body (JSON): -
