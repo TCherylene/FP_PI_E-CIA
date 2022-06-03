@@ -73,7 +73,8 @@
  <div id="header"></div>   
   <!-- ISI SALDO -->
     <div class="text-center">
-        <br><br>
+        <br>
+        <br>
             <h3>Isi Saldo</h3>
             <br><br>
             <form action="#" method="post">
@@ -81,10 +82,21 @@
                 <label>id User : </label>
                 <input type="text" class="id">
             </div>
+            <br>
                 <div class="text-center">
                     <label>Masukkan Nominal : </label>
                     <input type="text" class="uang">
                 </div>
+                <br>
+                <div class="text-center">
+                  <label for="pembayaran">Metode Pembayaran : </label>
+                  <select id="pembayaran">
+                  <option value="transfer">Transfer Bank</option>
+                  <option value="gopay">Gopay</option>
+                  <option value="ovo">OVO</option>
+                  <option value="dana" selected>Dana</option>
+              </select></div> 
+              <br>
                 <br>
                 <!-- <div class="text-center">
                     <form action="">
