@@ -16,7 +16,7 @@ exports.failed = function(message, res){
         "message": message
     }
 
-    res.json(data);
+    res.status(400).json(data);
     res.end();
 }
 
@@ -25,44 +25,45 @@ exports.serverError = function(message, res){
         "status": 500,
         "message": "Server Error"
     }
+    return;
+}
 
-    res.json(data);
+/* var categoryMap = {};
+var categories = [];
+rows.forEach(function(row) {
+   var category = categoryMap[row.categoryTitle];
+   if (!category) {
+      category = {
+         categoryTitle: row.categoryTitle,
+         categoryIcon: row.categoryIcon,
+         subCategory: []
+      };
+
+      categoryMap[row.categoryTitle] = category;
+      categories.push(category);
+   }
+
+   category.subCategory.push({
+     subCategoryTitle: row.subCategoryTitle,
+     subCategoryIcon: row.subCategoryIcon
+   });
+});
+
+response.json(categories);*/
+
+exports.successNested = function(values, res){
+    const hasil = values.reduce((akumulasikan, item) => {
+        
+    }, {});
+    
+    var data = {
+        "status": 200,
+        "values": hasil
+    }
+
+    res.status(200).json(data);
     res.end();
 }
-
-//response untuk nested matakuliah
-exports.oknested = function(values, res){
-    //lakukan akumulasi
-    const hasil = values.reduce((akumulasikan, item)=>{
-        //tentukan key group
-        // kalau ada nama yang sama
-        if(akumulasikan[item.nama]){
-            //buat variabel group nama mahasiswa
-            const group = akumulasikan[item.nama];
-            //cek jika isi array adalah matakuliah
-            if(Array.isArray(group.matakuliah)){
-                //tambahkan value ke dalam group matakuliah
-                group.matakuliah.push(item.matakuliah);
-            }else {
-                group.matakuliah = [group.matakuliah, item.matakuliah];
-            }
-        }else {
-            // kalau gaada yang sama
-            akumulasikan[item.nama] = item;
-        }
-        return akumulasikan;
-    }, {});
-
-    var data = {
-        'status':200,
-        'values':hasil
-    };
-    
-     res.json(data);
-     res.end();
-
-}
-
 
 /* Response yang diinginkan */
 /* 

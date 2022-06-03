@@ -10,21 +10,25 @@ var error1 = "hello";
 
 function serverErrorResponse(error1, error) {
      return response.serverError(error1, error);
- }
+}
  
- function successResponse(message, res){
+function successResponse(message, res){
      return response.success(message, res)
- }
+}
  
- function userErrorResponse(message, res){
+function userErrorResponse(message, res){
      return response.failed(message, res)
- }
+}
+
+function successResponseNested(message, res){
+     
+}
 
 //controller untuk registrasi user
 exports.registrasi = function (req, res) {
      var post = {
           name: req.body.name,
-          password: md5(req.body.pass),
+          password: req.body.pass,
           email: req.body.email,
           saldo: 0,
           role: req.body.role
@@ -80,7 +84,7 @@ exports.registrasi = function (req, res) {
 exports.login = function (req, res) {
      var post = {
           email: req.body.email,
-          password: md5(req.body.pass)
+          password: req.body.pass
      }
 
      if (post.email == null || post.password == null){

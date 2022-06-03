@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 02 Jun 2022 pada 10.19
+-- Waktu pembuatan: 03 Jun 2022 pada 11.46
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -20,32 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecia`
 --
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `bayar`
---
-
-CREATE TABLE `bayar` (
-  `id_bayar` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `nomor_wallet` varchar(32) NOT NULL,
-  `layanan` varchar(10) DEFAULT NULL,
-  `jumlah_pembayaran` bigint(20) NOT NULL,
-  `tanggal` date NOT NULL DEFAULT current_timestamp(),
-  `waktu` time NOT NULL DEFAULT current_timestamp(),
-  `status` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `bayar`
---
-
-INSERT INTO `bayar` (`id_bayar`, `id_client`, `nomor_wallet`, `layanan`, `jumlah_pembayaran`, `tanggal`, `waktu`, `status`) VALUES
-(1, 2, '20cbcdeef433589d1321f', 'tester', 15000, '2022-06-02', '14:43:03', 0),
-(2, 2, '20c7dd637bcdeef433589d1321f52363', 'tester', 15000, '2022-06-02', '14:43:14', 1),
-(3, 2, '20c7dd637bcdeef433589d1321f52363', 'tester', 15000, '2022-06-02', '14:53:07', 1);
 
 -- --------------------------------------------------------
 
@@ -68,67 +42,49 @@ CREATE TABLE `daftar_client` (
 --
 
 INSERT INTO `daftar_client` (`id_client`, `nama_client`, `email`, `password`, `nomor_wallet`, `saldo`, `role`) VALUES
-(1, 'Manura', 'manura@manura.com', '81dc9bdb52d04dc20036dbd8313ed055', '54ac17782fe813a6fe21a0d5133cc744', 25599, 1),
-(2, 'Alda', 'alda@alda.com', '81dc9bdb52d04dc20036dbd8313ed055', '20c7dd637bcdeef433589d1321f52363', -213099, 1),
-(3, 'Ira', 'ira@ira.com', '81dc9bdb52d04dc20036dbd8313ed055', '87823d8de907cd4a582dee291d146f92', 1000, 1),
-(23, 'orang', 'orang@orang.com', '81dc9bdb52d04dc20036dbd8313ed055', 'f32ca741291b8d0ef14f6b6ed7538d3b', 0, 0),
-(24, 'halo', 'halo@halo.com', '81dc9bdb52d04dc20036dbd8313ed055', '7a98ddf3ac08ccbb32e3668cde6cd59e', 0, 0);
+(1, 'Manura', 'manura@manura.com', '1234', '54ac17782fe813a6fe21a0d5133cc744', 6500, 1),
+(2, 'Alda', 'alda@alda.com', '1234', '20c7dd637bcdeef433589d1321f52363', 33001, 1),
+(3, 'Ira', 'ira@ira.com', '1234', '87823d8de907cd4a582dee291d146f92', 20500, 1),
+(4, 'halo', 'halo@halo.com', '1234', '142a52c5e20510265959a4731f6f37d8', 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `daftar_client_layanan`
+-- Struktur dari tabel `history`
 --
 
-CREATE TABLE `daftar_client_layanan` (
-  `id_daftar` smallint(6) NOT NULL,
-  `id_client` smallint(6) NOT NULL,
-  `layanan` varchar(5) NOT NULL,
-  `nomor_pelanggan` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `topup`
---
-
-CREATE TABLE `topup` (
-  `id_topUp` int(11) NOT NULL,
-  `id_pengirim` int(11) NOT NULL,
-  `id_client` int(11) NOT NULL,
-  `jumlah_topUp` bigint(20) NOT NULL,
-  `tanggal` date NOT NULL DEFAULT current_timestamp(),
-  `waktu` time NOT NULL DEFAULT current_timestamp(),
-  `status` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `transfer`
---
-
-CREATE TABLE `transfer` (
-  `id_transfer` int(11) NOT NULL,
+CREATE TABLE `history` (
+  `id_history` int(11) NOT NULL,
+  `jenis_transaksi` varchar(10) NOT NULL,
+  `nomor_wallet` varchar(32) NOT NULL,
   `id_pengirim` int(11) NOT NULL,
   `id_penerima` int(11) NOT NULL,
   `tanggal` date NOT NULL DEFAULT current_timestamp(),
-  `jam` time NOT NULL DEFAULT current_timestamp(),
-  `nominal` bigint(20) NOT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `waktu` time NOT NULL DEFAULT current_timestamp(),
+  `nominal` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `history`
+--
+
+INSERT INTO `history` (`id_history`, `jenis_transaksi`, `nomor_wallet`, `id_pengirim`, `id_penerima`, `tanggal`, `waktu`, `nominal`) VALUES
+(1, 'topup', '20c7dd637bcdeef433589d1321f52363', 2, 2, '2022-06-03', '15:18:36', 1),
+(2, 'topup', '20c7dd637bcdeef433589d1321f52363', 2, 2, '2022-06-03', '15:25:04', 15000),
+(3, 'bayar', '20c7dd637bcdeef433589d1321f52363', 2, 0, '2022-06-03', '15:25:08', 15000),
+(4, 'top up', '20c7dd637bcdeef433589d1321f52363', 2, 2, '2022-06-03', '15:26:07', 30000),
+(5, 'top up', '87823d8de907cd4a582dee291d146f92', 3, 2, '2022-06-03', '15:34:12', 30000),
+(6, 'top up', '87823d8de907cd4a582dee291d146f92', 3, 3, '2022-06-03', '15:35:00', 30000),
+(7, 'bayar', '87823d8de907cd4a582dee291d146f92', 3, 0, '2022-06-03', '15:35:22', 15000),
+(8, 'topup', '87823d8de907cd4a582dee291d146f92', 3, 3, '2022-06-03', '15:36:27', 30000),
+(9, 'transfer', '87823d8de907cd4a582dee291d146f92', 3, 1, '2022-06-03', '15:36:32', 15000),
+(10, 'bayar', '54ac17782fe813a6fe21a0d5133cc744', 1, 0, '2022-06-03', '15:43:20', 15000),
+(11, 'transfer', '54ac17782fe813a6fe21a0d5133cc744', 1, 2, '2022-06-03', '15:44:29', 3000),
+(12, 'transfer', '54ac17782fe813a6fe21a0d5133cc744', 1, 3, '2022-06-03', '15:44:40', 5500);
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indeks untuk tabel `bayar`
---
-ALTER TABLE `bayar`
-  ADD PRIMARY KEY (`id_bayar`),
-  ADD KEY `id_client` (`id_client`);
 
 --
 -- Indeks untuk tabel `daftar_client`
@@ -137,83 +93,26 @@ ALTER TABLE `daftar_client`
   ADD PRIMARY KEY (`id_client`);
 
 --
--- Indeks untuk tabel `daftar_client_layanan`
+-- Indeks untuk tabel `history`
 --
-ALTER TABLE `daftar_client_layanan`
-  ADD PRIMARY KEY (`id_daftar`);
-
---
--- Indeks untuk tabel `topup`
---
-ALTER TABLE `topup`
-  ADD PRIMARY KEY (`id_topUp`),
-  ADD KEY `id_client` (`id_client`);
-
---
--- Indeks untuk tabel `transfer`
---
-ALTER TABLE `transfer`
-  ADD PRIMARY KEY (`id_transfer`),
-  ADD UNIQUE KEY `id_transaksi` (`id_transfer`),
-  ADD KEY `id_pengirim` (`id_pengirim`),
-  ADD KEY `id_penerima` (`id_penerima`);
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`id_history`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT untuk tabel `bayar`
---
-ALTER TABLE `bayar`
-  MODIFY `id_bayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT untuk tabel `daftar_client`
 --
 ALTER TABLE `daftar_client`
-  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_client` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT untuk tabel `daftar_client_layanan`
+-- AUTO_INCREMENT untuk tabel `history`
 --
-ALTER TABLE `daftar_client_layanan`
-  MODIFY `id_daftar` smallint(6) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `topup`
---
-ALTER TABLE `topup`
-  MODIFY `id_topUp` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `transfer`
---
-ALTER TABLE `transfer`
-  MODIFY `id_transfer` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `bayar`
---
-ALTER TABLE `bayar`
-  ADD CONSTRAINT `bayar_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
-
---
--- Ketidakleluasaan untuk tabel `topup`
---
-ALTER TABLE `topup`
-  ADD CONSTRAINT `topup_ibfk_1` FOREIGN KEY (`id_client`) REFERENCES `daftar_client` (`id_client`);
-
---
--- Ketidakleluasaan untuk tabel `transfer`
---
-ALTER TABLE `transfer`
-  ADD CONSTRAINT `transfer_ibfk_1` FOREIGN KEY (`id_pengirim`) REFERENCES `daftar_client` (`id_client`),
-  ADD CONSTRAINT `transfer_ibfk_2` FOREIGN KEY (`id_penerima`) REFERENCES `daftar_client` (`id_client`);
+ALTER TABLE `history`
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
