@@ -89,7 +89,9 @@ Body(JSON):
 - nomor_wallet
 
 > Untuk melakukan pembelian terhadap suatu produk
-> Body `nomor_wallet` merupakan nomor rekening user di dalam E-CIA, untuk mendapatkan `nomor_wallet` dapat [cek di sini](#cek-profil)
+>
+> Body `nomor_wallet` merupakan nomor rekening user di dalam E-CIA, untuk mendapatkan `nomor_wallet` dapat dilakukan [di sini](#cek-profil)
+>
 > Selain `id_user`, hal-hal lain bersifat wajib
 
 ### Riwayat / History
