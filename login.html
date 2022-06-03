@@ -22,38 +22,46 @@
         <h1>Login </h1>
     
         <div class="login-form">
-          <form action="login.php">
-            <input type="Email" placeholder="Email">
-            <input type="password" placeholder="Password">
+          <form action="">
+            <input type="Email" id="email" placeholder="Email">
+            <input type="password"id="password"  placeholder="Password">
             <p>Belum punya akun? <a href="register.html">Register</a></p>
-            <button type="submit">LOG-IN</button>
+            <button type="submit"id="submit">LOG-IN</button>
           </form>
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
-      <script>  
-            function validation()  
-            {  
-                var id=document.f1.email.value;  
-                var ps=document.f1.password.value;  
-                if(id.length=="" && ps.length=="") {  
-                    alert("Email and Password fields are empty");  
-                    return false;  
-                }  
-                else  
-                {  
-                    if(id.length=="") {  
-                        alert("Email is empty, please fill the field");  
-                        return false;  
-                    }   
-                    if (ps.length=="") {  
-                    alert("Password field is empty, please fill the field");  
-                    return false;  
-                    }  
-                }                             
-            }  
-      </script>  
       </script>
+      </script>
+      <script>
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const email = document.querySelector("#email");
+    const password = document.querySelector("#password");
+    const buttonSubmit = document.querySelector("#submit");
+
+    buttonSubmit.addEventListener("click", (e) => {
+        e.preventDefault(); // mencegah refresh
+
+
+var raw = JSON.stringify({
+  email: email.value,
+  pass: password.value
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://api-ecia.herokuapp.com/api/login", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(JSON.parse(result[0].status)))
+  .catch(error => console.log('error', error));
+});
       </script>
       </div>
       </div>
