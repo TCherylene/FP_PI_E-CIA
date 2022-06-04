@@ -35,6 +35,32 @@
         $("#footer").load("footer.html");  
       }); 
     </script>  
+
+    <style>
+      .container-value{
+        height: 250px;
+        width: 400px;
+        display:inline-block;
+        padding: 25px;
+      }
+
+      form {
+        overflow:hidden;
+      }
+
+      .email, .nominal, .pembayaran, .choose-pembayaran{
+        display: block;
+        text-align: left; 
+      }
+
+      input {
+        width: calc(100%);
+      }
+      
+      button {
+        width: calc(20% - 20px);
+      }
+    </style>
   </head>
   
   <body>
@@ -62,37 +88,37 @@
         </nav>
       </div>
     </header><!-- End Header -->
+   
     <div class="text-center">
         <br>
-            <h3>Transfer</h3>
+            <div class="mb-5"></div>
+            <h3 class="mb-5">Transfer</h3>
             <form action="#" method="post">
-              
-                <div class="text-center">
+              <div class="container-value">
+              <div class="mb-3"> 
+                <label for="email" class="email">Email :</label>
+                <input id="email" type="text">
+              </div>
+              <div class="mb-3">
+                <label for="nominal" class="nominal">Nominal :</label>
+                <input id="nominal" type="text">
+              </div>
+              <div class="mb-3">
+                  <label for="pembayaran" class="pembayaran">Metode Pembayaran : </label>
+                  <select id="pembayaran" class="choose-pembayaran">
+                  <option value="transfer">Transfer Bank</option>
+                  <option value="gopay">Gopay</option>
+                  <option value="ovo">OVO</option>
+                  <option value="dana" selected>Dana</option>
+              </select></div>
+            </div> 
+              <br>
+              <div class="text-center">
                     <br>
-                    <label>Email   : </label>
-                    <input type="text" class="text">
+                    <button type="submit" a href="register.html" class="button button2">Bayar</button>
                 </div>
-                <br>
-                <div class="text-center">
-                    <label>Nominal : </label>
-                    <input type="text" class="uang">
-                </div>
-                <br>
-                <div class="text-center">
-                    <label for="pembayaran">Metode Pembayaran : </label>
-                    <select id="pembayaran">
-                    <option value="transfer">Transfer Bank</option>
-                    <option value="gopay">Gopay</option>
-                    <option value="ovo">OVO</option>
-                    <option value="dana" selected>Dana</option>
-                </select></div> 
-                <br>
-                <div class="text-center">
-                    <br>
-                    <div class="text-center" >
-                      <a href="register.html" class="button button2">Bayar</a>
-                      </div>
-                </div>
+              </div>
+            </div>
             </form>
             <br>
         </div>

@@ -1,26 +1,40 @@
 <?php      
     include('connect.php');  
-    $username = $_POST['user_name'];
+    $email = $_POST['email'];
     $password = $_POST['password'];  
       
         //to prevent from mysqli injection  
-        $user_name = stripcslashes($user_name);  
+        $email = stripcslashes($email);  
         $password = stripcslashes($password);  
-        $user_name = mysqli_real_escape_string($connect, $user_name);  
+        $email = mysqli_real_escape_string($connect, $email);  
         $password = mysqli_real_escape_string($connect, $password);  
     
-        $sql = "SELECT * FROM daftar_client where user_name = '$user_name' and password = '$password'";  
+        $sql = "SELECT * FROM akun where email = '$email' and password = '$password'";  
         $result = mysqli_query($connect, $sql);  
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
         $count = mysqli_num_rows($result);  
           
         if($count != 1){    
             echo("<script LANGUAGE='JavaScript'>
-                        // window.alert('Username or Password is wrong. Please try again.');
+                        window.alert('Username or Password is wrong. Please try again.');
                         window.location.href='home.html';
                     </script>");
-        }     
+        }   
+          
         else{
-            header('Location: login.html');
+            header('Location: home.html');
+            echo("<script LANGUAGE='JavaScript'>
+            window.location.href='home.html';
+        </script>");
+        debug_to_console("login berhasil")
+        }   
+
+        function debug_to_console($data) {
+            $output = $data;
+            if (is_array($output))
+                $output = implode(',', $output);
+        
+            echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
         }
+        
 ?>

@@ -35,6 +35,32 @@
         $("#footer").load("footer.html");  
       }); 
     </script>  
+
+    <style>
+      .container-value{
+        height: 250px;
+        width: 400px;
+        display:inline-block;
+        padding: 25px;
+      }
+
+      form {
+        overflow:hidden;
+      }
+
+      .email, .nominal, .pembayaran, .choose-pembayaran{
+        display: block;
+        text-align: left; 
+      }
+
+      input {
+        width: calc(100%);
+      }
+      
+      button {
+        width: calc(20% - 20px);
+      }
+    </style>
   </head>
   
   <body>
@@ -62,38 +88,37 @@
         </nav>
       </div>
     </header><!-- End Header -->
-
-  
-    <!-- Form pembayaran -->
+   
     <div class="text-center">
-            <br> <h3>Pembayaran</h3> <br>
+        <br>
+            <div class="mb-5"></div>
+            <h3 class="mb-5">Isi Saldo</h3>
             <form action="#" method="post">
-                <!-- <div class="text-center"> -->
-                  <div class="pt-50"></div>
-                  <div class="text-center"> 
-                    <label>Nomor Pelanggan     : </label>
-                    <input type="text" class="text">
-                  </div>
+              <div class="container-value">
+              <div class="mb-3"> 
+                <label for="idUser" class="idUser">Nomor pelanggan :</label>
+                <input id="idUser" type="text">
+              </div>
+              <div class="mb-3">
+                <label for="nominal" class="nominal">Nominal :</label>
+                <input id="nominal" type="text">
+              </div>
+              <div class="mb-3">
+                  <label for="pembayaran" class="pembayaran">Metode Pembayaran : </label>
+                  <select id="pembayaran" class="choose-pembayaran">
+                  <option value="transfer">Transfer Bank</option>
+                  <option value="gopay">Gopay</option>
+                  <option value="ovo">OVO</option>
+                  <option value="dana" selected>Dana</option>
+              </select></div>
+            </div> 
+              <br>
+              <div class="text-center">
                     <br>
-                    <tr><label>Masukkan Nominal  : </label></tr>
-                    <input type="text" class="text"></div><br>
-                <div class="text-center">
-                    <label for="pembayaran">Metode Pembayaran : </label>
-                    <select id="pembayaran">
-                    <option value="transfer">Transfer Bank</option>
-                    <option value="gopay">Gopay</option>
-                    <option value="ovo">OVO</option>
-                    <option value="dana" selected>Dana</option>
-                </select></div> <br>
-                <div class="text-center">
-                    <br>
-                    <!-- <form action="">
-                        <button type="submit">Bayar</button>
-                    </form> -->
-                    <div class="text-center" >
-                      <a href="pembayaran.html" class="button button2">Bayar</a>
-                    </div>
+                    <button type="submit" a href="register.html" class="button button2">Bayar</button>
                 </div>
+              </div>
+            </div>
             </form>
             <br>
         </div>
@@ -107,7 +132,7 @@
 
             })
         </script>
-         <!-- ======= Footer ======= -->
+  <!-- ======= Footer ======= -->
         <!-- <div id="footer"></div>  -->
         
           <!-- Site footer -->
