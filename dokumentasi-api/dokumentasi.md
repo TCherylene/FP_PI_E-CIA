@@ -6,9 +6,9 @@ API E-CIA tersedia pada: `https://api-ecia.herokuapp.com/api`
 
 ## Kelompok 5
 
-* Alda Risma Harjian 5027201004
-* Sharira Saniane 5027201016
-* Cherylene Trevina 50270201033
+* Alda Risma Harjian / 5027201004
+* Sharira Saniane / 5027201016
+* Cherylene Trevina / 50270201033
 
 ## Daftar Endpoints
 
@@ -215,6 +215,16 @@ Properties
 
 > `nomor_wallet` dapat didapatkan [di sini](#cek-profil)
 
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Pembayaran berhasil |
+| 400 | Nama_barang dan harga tidak boleh kosong |
+| 400 | Masukkan nomor_wallet |
+| 400 | Nomor wallet salah |
+| 400 | Saldo anda tidak mencukupi |
+
 ---
 
 ### Riwayat / History
@@ -226,3 +236,61 @@ Properties
 * Params: -
 * Authorization: `BEARER <token>`
 * Body (JSON): -
+
+#### Response yang dapat diterima
+
+| Status | Message/Value | Keterangan |
+| --- | --- | --- |
+| 200 | History topup, bayar, transfer | Jika tidak ada transaksi pada salah satu layanan (topup, bayar, atau transfer), maka history akan bernilai `null` |
+| 200 | User belum pernah melakukan transaksi | Jika user tidak pernah melakukan transaksi pada seluruh layanan (topup, bayar, dan transfer) |
+
+#### Contoh response
+
+Contoh 1
+
+```json
+{
+    "status": 200,
+    "topup": [
+        {
+            "id_history": 13,
+            "nomor_wallet": "abcdefg",
+            "id_pengirim": 14,
+            "id_penerima": 14,
+            "tanggal": "0000-00-00",
+            "waktu": "00:00:00",
+            "nominal": 100000
+        },
+        {
+            "id_history": 14,
+            "nomor_wallet": "abcdefg",
+            "id_pengirim": 14,
+            "id_penerima": 14,
+            "tanggal": "0000-00-00",
+            "waktu": "00:00:00",
+            "nominal": 100000
+        }
+    ],
+    "bayar": null,
+    "transfer": [
+        {
+            "id_history": 15,
+            "nomor_wallet": "abcdefg",
+            "id_pengirim": 14,
+            "id_penerima": 1,
+            "tanggal": "0000-00-00",
+            "waktu": "00:00:00",
+            "nominal": -100
+        }
+    ]
+}
+```
+
+Contoh 2 (tidak pernah melakukan transaksi)
+
+```json
+{
+    "status": 200,
+    "message": "User belum pernah melakukan transaksi"
+}
+```
