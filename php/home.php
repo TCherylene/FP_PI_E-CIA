@@ -1,3 +1,5 @@
+<?php require_once("auth.php"); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,32 +37,6 @@
         $("#footer").load("footer.html");  
       }); 
     </script>  
-
-    <style>
-      .container-value{
-        height: 250px;
-        width: 400px;
-        display:inline-block;
-        padding: 25px;
-      }
-
-      form {
-        overflow:hidden;
-      }
-
-      .email, .nominal, .pembayaran, .choose-pembayaran{
-        display: block;
-        text-align: left; 
-      }
-
-      input {
-        width: calc(100%);
-      }
-      
-      button {
-        width: calc(20% - 20px);
-      }
-    </style>
   </head>
   
   <body>
@@ -88,84 +64,59 @@
         </nav>
       </div>
     </header><!-- End Header -->
-   
-    <div class="text-center">
-        <br>
-            <div class="mb-5"></div>
-            <h3 class="mb-5">Isi Saldo</h3>
-            <form action="#" method="post">
-              <div class="container-value">
-              <div class="mb-3"> 
-                <label for="pembayaran" class="pembayaran">id User :</label>
-                <input id="pembayaran" type="text">
-              </div>
-              <div class="mb-3">
-                <label for="nominal" class="nominal">Nominal :</label>
-                <input id="nominal" type="text">
-              </div>
-              <div class="mb-3">
-                  <label for="pembayaran" class="pembayaran">Metode Pembayaran : </label>
-                  <select id="pembayaran" class="choose-pembayaran">
-                  <option value="transfer">Transfer Bank</option>
-                  <option value="gopay">Gopay</option>
-                  <option value="ovo">OVO</option>
-                  <option value="dana" selected>Dana</option>
-              </select></div>
-            </div> 
-              <br>
-              <div class="text-center">
-                    <br>
-                    <button type="submit" a href="register.html" class="button button2">Kirim</button>
+
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+
+    <div class="container">
+      <div class="text-center">
+      <div class=" col-lg-6 py-5 py-lg-0 order-2 order-lg-1" data-aos="fade-right">
+      </div>
+        <img src="assets/img/ecia.png" class="img-fluid" alt="">
+      </div>
+    </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about section-bg">
+      <div class="container">
+
+        <div class="row gy-4">
+          <!-- <div class="image col-xl-5"></div> -->
+          <div class="col-xl-7">
+          <div class="content d-flex flex-column justify-content-center ps-0 ps-xl-4"> 
+              <h3 data-aos="fade-in" data-aos-delay="100">Hai manura! Mau ngapain hari ini?</h3> 
+              <div class="row gy-4 mt-3">
+                <div class="col-md-6 icon-box" data-aos="fade-up">
+                  <i class="bx bx-receipt"></i>
+                  <h4><a href="pembayaran.html">Pembayaran</a></h4>
+                </div>
+                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
+                  <i class="bx bx-cube-alt"></i>
+                  <h4><a href="transfer.html">Transfer</a></h4>
+                </div>
+                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
+                  <i class="bx bx-images"></i>
+                  <h4><a href="topup.html">Isi Saldo</a></h4>
+                </div>
+                <div class="col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
+                  <i class="bx bx-shield"></i>
+                  <h4><a href="riwayat.html">Riwayat</a></h4>
                 </div>
               </div>
-            </div>
-            </form>
-            <br>
+            </div><!-- End .content-->
+          </div>
         </div>
-        <script src="jquery.min.js"></script>
-        <script src="jquery.mask.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
 
-                // Format mata uang.
-                $( '.uang' ).mask('000.000.000', {reverse: true});
+      </div>
+    </section><!-- End About Section -->
 
-            })
-        </script>
-
-        <!-- Fecth JS -->
-        <script>
-          var myHeaders = new Headers();
-          myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3dzIjpbeyJpZF9jbGllbnQiOjE3LCJuYW1hX2NsaWVudCI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0Iiwibm9tb3Jfd2FsbGV0IjoiNzg1ZTVlZGVkMjJkZmYzOTA1MmYwNzIyOTVmMmFkNDQiLCJyb2xlIjowfV0sImlhdCI6MTY1NDQxNDE0MH0.b3tre8ZY5ni-ZiCpgtY51Rf6jzXGa4UU9fLj_RNKs28");
-          myHeaders.append("Content-Type", "application/json");
-
-          const idUser = document.querySelector("#idUser");
-          const nominal = document.querySelector("#nominal");
-          const password = document.querySelector("#password");
-          const buttonSubmit = document.querySelector("#submit");
-          
-          const hasil = document.querySelector("#hasil");
-          buttonSubmit.addEventListener("click", (e) => {
-            e.preventDefault(); // mencegah refresh
-
-          var raw = JSON.stringify({
-            jumlah: nominal.value
-          });
-
-          var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-          };
-
-          fetch("https://api-ecia.herokuapp.com/api/profile/17", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        });
-        </script>
-  <!-- ======= Footer ======= -->
+ <!-- ======= Footer ======= -->
         <!-- <div id="footer"></div>  -->
         
           <!-- Site footer -->
@@ -188,5 +139,20 @@
                     <a href="home.html">E-CIA</a>.
             </div>
        </footer>
-        </body>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
 </html>
