@@ -249,36 +249,39 @@ Contoh 1
     "status": 200,
     "topup": [
         {
-            "id_history": 13,
-            "nomor_wallet": "abcdefg",
-            "id_pengirim": 14,
-            "id_penerima": 14,
-            "tanggal": "0000-00-00",
-            "waktu": "00:00:00",
+            "id_history": 16,
+            "nomor_wallet": "785e5eded22dff39052f072295f2ad44",
+            "id_pengirim": 17,
+            "id_penerima": 17,
+            "waktu": "2022-06-04T10:54:27.000Z",
             "nominal": 100000
         },
         {
-            "id_history": 14,
-            "nomor_wallet": "abcdefg",
-            "id_pengirim": 14,
-            "id_penerima": 14,
-            "tanggal": "0000-00-00",
-            "waktu": "00:00:00",
+            "id_history": 18,
+            "nomor_wallet": "20c7dd637bcdeef433589d1321f52363",
+            "id_pengirim": 2,
+            "id_penerima": 17,
+            "waktu": "2022-06-04T14:41:56.000Z",
             "nominal": 100000
+        },
+        {
+            "id_history": 19,
+            "nomor_wallet": "785e5eded22dff39052f072295f2ad44",
+            "id_pengirim": 17,
+            "id_penerima": 17,
+            "waktu": "2022-06-05T07:39:00.000Z",
+            "nominal": 50000
         }
     ],
-    "bayar": null,
-    "transfer": [
+    "bayar": [
         {
-            "id_history": 15,
-            "nomor_wallet": "abcdefg",
-            "id_pengirim": 14,
-            "id_penerima": 1,
-            "tanggal": "0000-00-00",
-            "waktu": "00:00:00",
-            "nominal": -100
+            "id_history": 17,
+            "nomor_wallet": "785e5eded22dff39052f072295f2ad44",
+            "waktu": "2022-06-04T10:54:38.000Z",
+            "nominal": 1000
         }
-    ]
+    ],
+    "transfer": null
 }
 ```
 
