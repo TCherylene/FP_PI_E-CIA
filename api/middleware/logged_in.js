@@ -154,6 +154,10 @@ exports.bayar = function(req, res){
         id_user = dataToken.id_client;
     }
 
+    if(id_user != dataToken.id_client || dataToken.role != 1){
+        return userErrorResponse("Anda tidak dapat mengakses halaman ini")
+    }
+
     var dataPostman = {
         id_user: id_user,
         nama_barang: req.body.nama_barang,
@@ -165,6 +169,11 @@ exports.bayar = function(req, res){
     // wallet: memilih e wallet yang mana
     // nomor wallet: dari get profile
     
+    // Harga nya <= 0
+    if(dataPostman.harga <= 0){
+        return userErrorResponse("Harga harus lebih dari 0", res)
+    }
+
     // Barang & harga nya kosong
     if(dataPostman.nama_barang == null || dataPostman.harga == null){
         return userErrorResponse("Nama_barang dan harga tidak boleh kosong", res)
