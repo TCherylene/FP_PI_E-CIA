@@ -59,7 +59,7 @@ CREATE TABLE `history` (
   `nomor_wallet` varchar(32) NOT NULL,
   `id_pengirim` int(11) NOT NULL,
   `id_penerima` int(11) NOT NULL,
-  `waktu` datetime NOT NULL DEFAULT current_timestamp(),
+  `waktu` datetime,
   `nominal` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
