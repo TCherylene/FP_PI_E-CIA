@@ -1,7 +1,9 @@
 var url = "https://api-ecia.herokuapp.com/api/login";
+const eclogin = JSON.parse(localStorage.getItem("ecia"));
+
 
 var myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3dzIjpbeyJpZF9jbGllbnQiOjIsIm5hbWFfY2xpZW50IjoiQWxkYSIsImVtYWlsIjoiYWxkYUBhbGRhLmNvbSIsInBhc3N3b3JkIjoiMTIzNCIsIm5vbW9yX3dhbGxldCI6IjIwYzdkZDYzN2JjZGVlZjQzMzU4OWQxMzIxZjUyMzYzIiwicm9sZSI6MX1dLCJpYXQiOjE2NTQ0MjA0MzR9.5wW95Jwhpp6cf2SU1CBNfokjIoM-UiL8N3KYcZz_ixk");
+myHeaders.append("Authorization", "BEARER " + ecia);
 myHeaders.append("Content-Type", "application/json");
 
 const email = document.querySelector("#email");
