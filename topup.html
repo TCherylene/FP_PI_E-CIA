@@ -60,6 +60,12 @@
       button {
         width: calc(20% - 20px);
       }
+
+      #fonttopup{
+      font-family: "Raleway", sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+  }
     </style>
   </head>
   
@@ -92,7 +98,7 @@
     <div class="text-center">
         <br>
             <div class="mb-5"></div>
-            <h3 class="mb-5">Isi Saldo</h3>
+            <h3 class="mb-5"id="fonttopup">Isi Saldo</h3>
             <form action="#" method="post">
               <div class="container-value">
               <div class="mb-3"> 
@@ -124,47 +130,17 @@
         </div>
         <script src="jquery.min.js"></script>
         <script src="jquery.mask.min.js"></script>
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
             $(document).ready(function(){
 
                 // Format mata uang.
                 $( '.uang' ).mask('000.000.000', {reverse: true});
 
             })
-        </script>
+        </script> -->
 
-        <!-- Fecth JS -->
-        <script>
-          var myHeaders = new Headers();
-          myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3dzIjpbeyJpZF9jbGllbnQiOjE3LCJuYW1hX2NsaWVudCI6InRlc3QiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjM0Iiwibm9tb3Jfd2FsbGV0IjoiNzg1ZTVlZGVkMjJkZmYzOTA1MmYwNzIyOTVmMmFkNDQiLCJyb2xlIjowfV0sImlhdCI6MTY1NDQxNDE0MH0.b3tre8ZY5ni-ZiCpgtY51Rf6jzXGa4UU9fLj_RNKs28");
-          myHeaders.append("Content-Type", "application/json");
-
-          const idUser = document.querySelector("#idUser");
-          const nominal = document.querySelector("#nominal");
-          const password = document.querySelector("#password");
-          const buttonSubmit = document.querySelector("#submit");
-          
-          const hasil = document.querySelector("#hasil");
-          buttonSubmit.addEventListener("click", (e) => {
-            e.preventDefault(); // mencegah refresh
-
-          var raw = JSON.stringify({
-            jumlah: nominal.value
-          });
-
-          var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-          };
-
-          fetch("https://api-ecia.herokuapp.com/api/profile/17", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        });
-        </script>
+        
+        <script src="topup.js"> </script>
   <!-- ======= Footer ======= -->
         <!-- <div id="footer"></div>  -->
         

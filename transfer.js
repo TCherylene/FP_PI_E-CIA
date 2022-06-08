@@ -1,5 +1,6 @@
 var url = "https://api-ecia.herokuapp.com/api/login";
-const eclogin = JSON.parse(localStorage.getItem("ecia"));
+const ecia = JSON.stringify(localStorage.getItem('ecia'));
+window.localStorage.setItem('ecia', ecia.token);
 
 
 var myHeaders = new Headers();

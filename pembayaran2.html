@@ -60,6 +60,12 @@
       button {
         width: calc(20% - 20px);
       }
+  #fontspembayaran{
+    font-family: "Raleway", sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+  }
+
     </style>
   </head>
   
@@ -91,7 +97,7 @@
     <div class="text-center">
       <br>
           <div class="mb-5"></div>
-          <h3 class="mb-5">Transfer</h3>
+          <h3 class="mb-5" id="fontspembayaran" >Pembayaran</h3>
           <form action="#" method="post">
             <div class="container-value">
             <div class="mb-3"> 
@@ -114,23 +120,25 @@
               <br>
               <div class="text-center">
                     <br>
-                    <button type="submit" a href="register.html" class="button button2">Bayar</button>
+                    <button type="submit" a href="register.html" id="submit" class="button button2">Bayar</button>
                 </div>
               </div>
             </div>
             </form>
             <br>
         </div>
+        <script src="pembayaran.js"> </script>
         <script src="jquery.min.js"></script>
         <script src="jquery.mask.min.js"></script>
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
             $(document).ready(function(){
 
                 // Format mata uang.
                 $( '.uang' ).mask('000.000.000', {reverse: true});
 
             })
-        </script>
+        </script> -->
+       
   <!-- ======= Footer ======= -->
         <!-- <div id="footer"></div>  -->
         
