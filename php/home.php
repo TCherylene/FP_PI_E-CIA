@@ -1,5 +1,3 @@
-<?php require_once("auth.php"); ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,6 +53,7 @@
             <li><a class="nav-link scrollto" href="pembayaran.html">PEMBAYARAN</a></li>
             <li><a class="nav-link scrollto" href="transfer.html">TRANSFER</a></li>
             <li><a class="nav-link scrollto" href="riwayat.html">RIWAYAT</a></li>
+            <li><a class="nav-link scrollto" href="logout.php">LOG OUT</a></li>
             <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             </li>
             <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
@@ -154,5 +153,6 @@
   <script src="assets/js/main.js"></script>
 
 </body>
+
 
 </html>

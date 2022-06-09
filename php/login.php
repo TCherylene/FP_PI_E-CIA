@@ -4,7 +4,7 @@ require_once("config.php");
 
 if(isset($_POST['login'])){
 
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $username = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
     $sql = "SELECT * FROM users WHERE username=:username OR email=:email";
