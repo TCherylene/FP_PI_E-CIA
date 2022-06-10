@@ -1,4 +1,4 @@
-var url = "https://api-ecia.herokuapp.com/api/login";
+var url = "http://localhost:8000/api/login";
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -28,6 +28,7 @@ buttonSubmit.addEventListener("click", (e) => {
     async function getResponse(){
         try {
             let res = await fetch(url, requestOptions)
+            console.log("Fetch berhasil");
             return await (res.text());
         } catch(error) {
             console.log('error', error)
@@ -36,11 +37,10 @@ buttonSubmit.addEventListener("click", (e) => {
 
     async function getData(){
         let data = await getResponse();
-        var dataJSON = JSON.parse(data);
 
+        var dataJSON = JSON.parse(data);
         window.localStorage.setItem('ecia', dataJSON.token);
     };
 
-    getData()
-
+    getData();
 })
