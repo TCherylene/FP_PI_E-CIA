@@ -39,7 +39,14 @@ buttonSubmit.addEventListener("click", (e) => {
         let data = await getResponse();
 
         var dataJSON = JSON.parse(data);
-        window.localStorage.setItem('ecia', dataJSON.token);
+        
+        if(dataJSON.status == 200){
+            window.localStorage.setItem('ecia', dataJSON.token);
+        }
+
+        if(dataJSON.status == 400){
+            alert("Terdapat kesalahan silahkan coba lagi");
+        }
     };
 
     getData();
