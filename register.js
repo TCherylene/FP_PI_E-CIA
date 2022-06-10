@@ -3,21 +3,19 @@ var url = "http://localhost:8000/api/profile";
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-const nama =  document.querySelector("#name");
-const email = document.querySelector("#email");
-const password = document.querySelector("#password");
 const buttonSubmit = document.querySelector("#submit");
-
-
-// email.innerText = (nilai yang mau ditampilkan disini) harus dideklrasi terlebih dahulu 
 
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
+    
+    const nama =  document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const pass = document.querySelector("#pass");
 
     var raw = JSON.stringify({
         name: nama.value,
         email: email.value,
-        pass: password.value
+        pass: pass.value
     });
 
     var requestOptions = {

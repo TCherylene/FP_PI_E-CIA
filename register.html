@@ -25,7 +25,7 @@
           <form method="POST" action="" >
             <input type="name" id="name" placeholder="Name">
             <input type="email" id="email" placeholder="Email">
-            <input type="password"id="password" placeholder="Password">
+            <input type="password"id="pass" placeholder="Password">
             <p>Sudah punya akun? <a href="login.html">Login</a></p>
             <div class='row'></div>
             <button type="submit" id="submit">Register</button>
@@ -36,60 +36,5 @@
       </div>
   </div>
 </body>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
-<script>
-  // const nama_clientlInputEl = document.querySelector(".nama-input-validate");
-  // const email_clientlInputEl = document.querySelector(".email-input-validate");
-  // const passwordInputEl = document.querypassword-input-validateSelector(".password-input-validate");
-
-  
-  // function formValidation() {
-  //   if (nama_clientInputEl.value == "" ||user_emailInputEl.value == ""  || passwordInputEl.value == "") {
-  //     alert("Please complete the data first!");
-  //     return false;
-  //   }
-  //   else {
-  //     alert("Data added successfully! Please login.");
-  //     return true;
-  //   }
-  // }
-    </script>
-    <!-- <script>
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      const nama = document.querySelector("#name");
-      const email = document.querySelector("#email");
-      const password = document.querySelector("#password");
-      const buttonSubmit = document.querySelector("#submit");
-      
-      // const hasil = document.querySelector("#hasil");
-      buttonSubmit.addEventListener("click", (e) => {
-        e.preventDefault(); // mencegah refresh
-
-      var raw = JSON.stringify({
-        name: nama.value,
-        email: email.value,
-        pass : password.value,
-      });
-
-      console.log(raw)
-
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      };
-
-    fetch("https://api-ecia.herokuapp.com/api/profile", requestOptions)
-        .then(response => response.json())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-      });
-    
-</script> -->
-  </body>
   <script src="register.js"> </script>
 </html>
