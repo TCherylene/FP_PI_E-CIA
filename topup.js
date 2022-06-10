@@ -7,6 +7,7 @@ function parseJwt (token) {
   return JSON.stringify(jsonPayload);
 };
 
+// Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
 
 // Ambil Data Token
@@ -15,25 +16,31 @@ var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
 // Untuk Fetch
 var myHeaders = new Headers();
 
+// Buat variabel token
 var token = ("Bearer " + ecia).replace(/\"/g, "");
 
+// Ini dari postman
 myHeaders.append("Authorization", token);
 myHeaders.append("Content-Type", "application/json");
 
+// Ini cocokin dari HTML
 const id_user = document.querySelector("#id_user")
 const nominal = document.querySelector("#nominal");
 const buttonSubmit = document.querySelector("#submit");
 
+// Ini kalo mencet submit
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
+    // ini URL
     var url = "http://localhost:8000/api/profile/" + id_user.value
-    console.log(url)
 
+    // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
       jumlah: nominal.value
     });
     
+    // Ini dari postman
     var requestOptions = {
       method: 'PUT',
       headers: myHeaders,
@@ -41,6 +48,7 @@ buttonSubmit.addEventListener("click", (e) => {
       redirect: 'follow'
     };
 
+    // Ini buat nge fetch (JANGAN Diilangin)
     async function getResponse(){
       try {
           let res = await fetch(url, requestOptions)
@@ -51,19 +59,24 @@ buttonSubmit.addEventListener("click", (e) => {
       };
     }
 
+    // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
     async function getData(){
       let data = await getResponse();
 
       var dataJSON = JSON.parse(data);
 
+      // Ini kalau status nya 200 (berhasil Top Up)
       if(dataJSON.status == 200){
-          alert("Transfer berhasil")
+          alert("Top Up berhasil")
       }
-
+      
+      // Ini kalau status nya 400 (ga berhasil)
       if(dataJSON.status == 400){
+          // ini buat ambil data "message" dari hasil fetch
           alert(dataJSON.message);
       }
     };
 
+    // ini buat jalanin getData (Jangan diilangin 3.0)
     getData();
 })
