@@ -3,23 +3,26 @@ var url = "http://localhost:8000/api/profile";
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
-const nama =  document.querySelector("#name");
-const email = document.querySelector("#email");
-const password = document.querySelector("#password");
-const buttonSubmit = document.querySelector("#register");
-
-
-// email.innerText = (nilai yang mau ditampilkan disini) harus dideklrasi terlebih dahulu 
+const buttonSubmit = document.querySelector("#submit");
 
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
+    
+    const nama =  document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const pass = document.querySelector("#pass");
 
     var raw = JSON.stringify({
+<<<<<<< HEAD
     name: nama.value,
     email: email.value,
     pass: password.value
+=======
+        name: nama.value,
+        email: email.value,
+        pass: pass.value
+>>>>>>> c6357790643348744ad2550f46ddc02a4c79ce47
     });
-    console.log(raw)
 
     var requestOptions = {
         method: 'POST',
@@ -27,7 +30,6 @@ buttonSubmit.addEventListener("click", (e) => {
         body: raw,
         redirect: 'follow'
     };
-console.log(requestOptions)
 
     async function getResponse(){
         try {
@@ -39,10 +41,9 @@ console.log(requestOptions)
         };
     }
 
-
     async function getData(){
         let data = await getResponse();
-        console.log("get respond berhasil")
+
         var dataJSON = JSON.parse(data);
         
         if(dataJSON.status == 200){
