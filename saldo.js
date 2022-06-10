@@ -9,6 +9,9 @@ function parseJwt (token) {
 
 // Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
+if(ecia==null||!ecia || ecia==undefined){
+  window.location.href = "login.html"
+ }
 
 // Ambil Data Token
 var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
@@ -24,6 +27,7 @@ myHeaders.append("Authorization", token);
 myHeaders.append("Content-Type", "application/json");
 
 // Ini cocokin dari HTML
+const idku = document.querySelector("#Idku")
 const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
@@ -60,9 +64,8 @@ console.log(data)
       var dataJSON =JSON.parse(data);
       console.log(dataJSON)
 
-      // Ini kalau status nya 200 (berhasil Top Up)
-      // if(dataJSON.status == 200){
-        // document.getElementById("saldoku").innerHTML=dataJSON.jumlah 
+        var idkita = dataJSON.id_user
+        idku.innerText = idkita
         var saldokita = dataJSON.jumlah
         saldo.innerText = saldokita
         var walletkita = dataJSON.nomor_wallet

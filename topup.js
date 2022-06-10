@@ -9,6 +9,9 @@ function parseJwt (token) {
 
 // Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
+if(ecia==null||!ecia){
+  window.location.href = "login.html"
+ }
 
 // Ambil Data Token
 var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]

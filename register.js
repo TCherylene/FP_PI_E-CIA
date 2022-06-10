@@ -13,15 +13,10 @@ buttonSubmit.addEventListener("click", (e) => {
     const pass = document.querySelector("#pass");
 
     var raw = JSON.stringify({
-<<<<<<< HEAD
+
     name: nama.value,
     email: email.value,
-    pass: password.value
-=======
-        name: nama.value,
-        email: email.value,
-        pass: pass.value
->>>>>>> c6357790643348744ad2550f46ddc02a4c79ce47
+    pass: pass.value
     });
 
     var requestOptions = {
