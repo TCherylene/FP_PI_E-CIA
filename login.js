@@ -42,6 +42,7 @@ buttonSubmit.addEventListener("click", (e) => {
         
         if(dataJSON.status == 200){
             window.localStorage.setItem('ecia', dataJSON.token);
+            window.location.href = "home.html";
         }
 
         if(dataJSON.status == 400){
