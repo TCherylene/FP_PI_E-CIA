@@ -15,9 +15,9 @@ buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
     var raw = JSON.stringify({
-        "name": nama.value,
-        "email": email.value,
-       "pass": password.value
+    name: nama.value,
+    email: email.value,
+    pass: password.value
     });
     console.log(raw)
 

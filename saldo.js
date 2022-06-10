@@ -1,23 +1,81 @@
+function parseJwt (token) {
+  var base64 = token.split('.')[1];
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
-const ecia = JSON.stringify(localStorage.getItem('ecia'));
-window.localStorage.setItem('ecia', ecia.token);
-
-var myHeaders = new Headers();
-myHeaders.append("Authorization", "BEARER " + ecia);
-myHeaders.append("Content-Type", "application/json");
-window.localStorage.setItem('ecia', dataJSON.token);
-
-var raw = "";
-
-var requestOptions = {
-  method: 'GET',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-  
+  return JSON.stringify(jsonPayload);
 };
 
-fetch("https://api-ecia.herokuapp.com/api/profile/", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
+// Ambil data cookie
+const ecia = JSON.stringify(localStorage.getItem('ecia'));
+
+// Ambil Data Token
+var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+
+// Untuk Fetch
+var myHeaders = new Headers();
+
+// Buat variabel token
+var token = ("Bearer " + ecia).replace(/\"/g, "");
+
+// Ini dari postman
+myHeaders.append("Authorization", token);
+myHeaders.append("Content-Type", "application/json");
+
+// Ini cocokin dari HTML
+const saldo = document.querySelector("#saldoku")
+const wallet = document.querySelector("#walletku")
+
+    // ini URL
+    var url = "http://localhost:8000/api/profile/" 
+
+    // Ini data yang mau dikirimin ke url
+    var raw = "";
+
+
+    // Ini dari postman
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      // body: raw,
+      redirect: 'follow'
+    };
+
+    // Ini buat nge fetch (JANGAN Diilangin)
+    async function getResponse(){
+      try {
+          let res = await fetch(url, requestOptions)
+          console.log("Fetch berhasil");
+          return await (res.text());
+      } catch(error) {
+          console.log('error', error)
+      };
+    }
+
+    // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
+    async function getData(){
+      let data = await getResponse();
+console.log(data)
+      var dataJSON =JSON.parse(data);
+      console.log(dataJSON)
+
+      // Ini kalau status nya 200 (berhasil Top Up)
+      // if(dataJSON.status == 200){
+        // document.getElementById("saldoku").innerHTML=dataJSON.jumlah 
+        var saldokita = dataJSON.jumlah
+        saldo.innerText = saldokita
+        var walletkita = dataJSON.nomor_wallet
+        wallet.innerText = walletkita
+      
+      
+      
+      // Ini kalau status nya 400 (ga berhasil)
+      if(dataJSON.status == 400){
+          // ini buat ambil data "message" dari hasil fetch
+          alert(dataJSON.message);
+      }
+    };
+
+    // ini buat jalanin getData (Jangan diilangin 3.0)
+    getData();
