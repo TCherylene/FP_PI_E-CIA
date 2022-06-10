@@ -89,7 +89,7 @@
           <!-- <div class="image col-xl-5"></div> -->
           <div class="col-xl-7">
           <div class="content d-flex flex-column justify-content-center ps-0 ps-xl-4"> 
-              <h3 data-aos="fade-in" data-aos-delay="100">Hai manura! Mau ngapain hari ini?</h3> 
+              <h3 data-aos="fade-in" data-aos-delay="100">Halo! Mau ngapain hari ini?</h3> 
               <div class="row gy-4 mt-3">
                 <div class="col-md-6 icon-box" data-aos="fade-up">
                   <i class="bx bx-receipt"></i>

@@ -28,6 +28,17 @@
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet"> 
 
+    <style>
+      /* #pembayaran1-html{
+      font-size: 120%;
+    } */
+    #listrik,#air,#pulsa,#internet{
+      font-size: 150%;
+    }
+
+    
+    </style>
+
     <script src="//code.jquery.com/jquery-1.10.2.js"></script> 
     <script>  
       $(function(){ 
@@ -35,41 +46,10 @@
         $("#footer").load("footer.html");  
       }); 
     </script>  
-
-    <style>
-      .container-value{
-        height: 250px;
-        width: 400px;
-        display:inline-block;
-        padding: 25px;
-      }
-
-      form {
-        overflow:hidden;
-      }
-
-      .email, .nominal, .pembayaran, .choose-pembayaran{
-        display: block;
-        text-align: left; 
-      }
-
-      input {
-        width: calc(100%);
-      }
-      
-      button {
-        width: calc(20% - 20px);
-      }
-
-      #fonttopup{
-      font-family: "Raleway", sans-serif;
-      font-weight: bold;
-      font-size: 30px;
-  }
-    </style>
   </head>
   
   <body>
+    <br>
     <!-- ======= Header ======= -->
     <header id="header">
       <div class="container d-flex align-items-center justify-content-between">
@@ -81,10 +61,7 @@
         <nav id="navbar" class="navbar">
           <ul>
             <li><a class="nav-link scrollto active" href="home.html">HOME</a></li>
-            <li><a class="nav-link scrollto" href="topup.html">ISI SALDO</a></li>
-            <li><a class="nav-link scrollto" href="pembayaran.html">PEMBAYARAN</a></li>
-            <li><a class="nav-link scrollto" href="transfer.html">TRANSFER</a></li>
-            <li><a class="nav-link scrollto" href="riwayat.html">RIWAYAT</a></li>
+            <li><a class="nav-link scrollto" href="saldo.html">ISI SALDO</a></li>
             <li><a class="nav-link scrollto" href="logout.php">LOG OUT</a></li>
             <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             </li>
@@ -94,58 +71,23 @@
           <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
       </div>
-    </header><!-- End Header -->
-   
-    <div class="text-center">
-        <br>
-            <div class="mb-5"></div>
-            <h3 class="mb-5"id="fonttopup">Isi Saldo</h3>
-            <form action="#" method="post">
-              <div class="container-value">
-              <div class="mb-3"> 
-                <label for="pembayaran" class="pembayaran">id User :</label>
-                <input id="pembayaran" type="text">
-              </div>
-              <div class="mb-3">
-                <label for="nominal" class="nominal">Nominal :</label>
-                <input id="nominal" type="text">
-              </div>
-              <div class="mb-3">
-                  <label for="pembayaran" class="pembayaran">Metode Pembayaran : </label>
-                  <select id="pembayaran" class="choose-pembayaran">
-                  <option value="transfer">Transfer Bank</option>
-                  <option value="gopay">Gopay</option>
-                  <option value="ovo">OVO</option>
-                  <option value="dana" selected>Dana</option>
-              </select></div>
-            </div> 
-              <br>
-              <div class="text-center">
-                    <br>
-                    <button type="submit" a href="register.html" class="button button2">Kirim</button>
-                </div>
-              </div>
-            </div>
-            </form>
-            <br>
-        </div>
-        <script src="jquery.min.js"></script>
-        <script src="jquery.mask.min.js"></script>
-        <!-- <script type="text/javascript">
-            $(document).ready(function(){
-
-                // Format mata uang.
-                $( '.uang' ).mask('000.000.000', {reverse: true});
-
-            })
-        </script> -->
-
-        
-        <script src="topup.js"> </script>
-  <!-- ======= Footer ======= -->
+    </header><br><br>
+    <!-- End Header -->
+<br><br>
+<body>
+    <br>
+    <center>
+    <br><
+    <h1>Selamat, anda berhasil melakukan transaksi</h1>
+    <!-- <a href="action-logout.php">Logout</a> -->
+    </center>
+</body>
+<br><br>
+<!-- ======= Footer ======= -->
         <!-- <div id="footer"></div>  -->
         
           <!-- Site footer -->
+          <br><br>
           <footer class="site-footer">
             <div class="container">
               <div class="row">

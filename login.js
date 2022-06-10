@@ -7,6 +7,9 @@ const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 const buttonSubmit = document.querySelector("#submit");
 
+
+// email.innerText = (nilai yang mau ditampilkan disini) harus dideklrasi terlebih dahulu 
+
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 

@@ -8,7 +8,7 @@ myHeaders.append("Authorization", "BEARER " + ecia);
 myHeaders.append("Content-Type", "application/json");
 
 const email = document.querySelector("#email");
-const password = document.querySelector("#password");
+const nominal = document.querySelector("#nominal");
 const buttonSubmit = document.querySelector("#submit");
 
 buttonSubmit.addEventListener("click", (e) => {
@@ -16,7 +16,7 @@ buttonSubmit.addEventListener("click", (e) => {
 
 var raw = JSON.stringify({
   email: email.value,
-  jumlah: jumlah.value
+  nominal: nominal.value
 });
 
 var requestOptions = {
@@ -38,7 +38,6 @@ async function getResponse(){
 async function getData(){
     let data = await getResponse();
     var dataJSON = JSON.parse(data);
-
     window.localStorage.setItem('ecia', dataJSON.token);
 };
 
