@@ -1,74 +1,141 @@
+function parseJwt (token) {
+  var base64 = token.split('.')[1];
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
+  return JSON.stringify(jsonPayload);
+};
+
+// Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
-window.localStorage.setItem('ecia', ecia.token);
+if(ecia==null||!ecia){
+  window.location.href = "login.html"
+ }
 
+// Ambil Data Token
+var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+
+// Untuk Fetch
 var myHeaders = new Headers();
-myHeaders.append("Authorization", "BEARER " + ecia);
 
-var raw = "";
+// Buat variabel token
+var token = ("Bearer " + ecia).replace(/\"/g, "");
 
+// Ini dari postman
+myHeaders.append("Authorization", token);
+myHeaders.append("Content-Type", "application/json");
+
+// Ini cocokin dari HTML
+const saldoAkhir = document.querySelector("#saldoAkhir")
+
+// ini URL
+// var url1 = "https://api-ecia.herokuapp.com/api/riwayat"
+//var url2 = "https://api-ecia.herokuapp.com/api/profile"
+var url1 = "http://localhost:8000/api/riwayat"
+var url2 = "http://localhost:8000/api/profile"
+
+// Ini dari postman
 var requestOptions = {
   method: 'GET',
   headers: myHeaders,
-  body: raw,
   redirect: 'follow'
 };
 
-// fetch("https://api-ecia.herokuapp.com/api/riwayat", requestOptions)
-//   .then(response => response.text())
-//   .then(result => console.log(result))
-//   result.data.forEach((history) => {
-//     // console.log(history);
+// Ini buat nge fetch (JANGAN Diilangin)
+async function getResponse(url){
+  try {
+      let res = await fetch(url, requestOptions)
+      console.log("Fetch berhasil");
+      return await (res.text());
+  } catch(error) {
+      console.log('error', error)
+  };
+}
 
-//     // creating element
-//     const trEl = document.createElement("tr");
+// Ini buat setelah nge fetch (JANGAN diilangin 2.0)
+async function getData(url){
+  let data = await getResponse(url);
 
-//     const noTd = document.createElement("td");
-//     const namaTd = document.createElement("td");
-//     const jenisTransaksiTd = document.createElement("td");
-//     const nominalPengeluaranTd = document.createElement("td");
-//     const jumlahTopupTd = document.createElement("td");
+  var dataJSON = JSON.parse(data);
 
-//     noTd.innerText = index;
-//     namaTd.innerText = history.userNama;
-//     jenisTransaksiTd.innerText = history.jenisTransaksi;
-//     nominalPengeluaranTd.innerText = history.nominalPengeluaran;
-//     jumlahTopupTd.innerText = history.jumlahTopup;
+  if(dataJSON.status == 200 && dataJSON.message == "User belum pernah melakukan transaksi"){
+    saldoAkhir.innerText = 0;
+    createTable("-", "-");
+  }
 
-//     index++;
+  // Ini kalau status nya 200 (berhasil Top Up)
+  if(dataJSON.status == 200){
+    // Top Up
+    if (dataJSON.topup != null){
+      dataJSON.topup.forEach(element => {
+        createTable("Top Up", element)
+      });
+    }
 
-//     trEl.append(noTd, namaTd, jenisTransaksiTd, nominalPengeluaranTd, jumlahTopupTd);
-//     bodyTableHistory.append(trEl);
-//   });
-//   .catch(error => console.log('error', error));
+    // Pembelian / bayar
+    if (dataJSON.bayar != null){
+      dataJSON.bayar.forEach(element => {
+        createTable("Pembelian", element)
+      });
+    }
 
-fetch("https://api-ecia.herokuapp.com/api/riwayat", requestOptions)
-  .then((response) => response.json())
-  .then((result) => {
-    result.data.forEach((riwayat) => {
-      // console.log(history);
+    // Transfer
+    if (dataJSON.transfer != null){
+      dataJSON.transfer.forEach(element => {
+        createTable("Transfer", element)
+      });
+    }
+  }
+  
+  // Ini kalau status nya 400 (ga berhasil)
+  if(dataJSON.status == 400){
+      // ini buat ambil data "message" dari hasil fetch
+      alert(dataJSON.message)
+  }
+};
 
-      // creating element
-      const trEl = document.createElement("tr");
+async function getData1(url){
+  let data = await getResponse(url);
 
-      const jenisTransaksi = document.createElement("td");
-      const metodepembayaran = document.createElement("td");
-      const waktu = document.createElement("td");
-      const total = document.createElement("td");
-      // const jumlahTopupTd = document.createElement("td");
+  var dataJSON = JSON.parse(data);
+  
+  saldoAkhir.innerHTML = dataJSON.jumlah;
+}
 
-      jenisTransaksi.innerText = index;
-      metodepembayaran.innerText = riwayat.metodepembayaran;
-      waktu.innerText = riwayat.waktu;
-      total.innerText = riwayat.total;
-      // jumlahTopupTd.innerText = history.jumlahTopup;
+// ini buat jalanin getData (Jangan diilangin 3.0)
+getData(url1);
+getData1(url2);
 
-      index++;
+// Function untuk bikin tabel
+function createTable(datacategory, riwayat){
+  // creating element
+  const trEl = document.createElement("tr");
 
-      trEl.append(jenisTransaksi, metodepembayaran, waktu, total);
-      bodyTableriwayat.append(trEl);
-    });
-  })
-  .catch((error) => console.log("error", error));
+  const bodyTableriwayat = document.querySelector("#list_status_item")
+
+  const jenisTransaksi = document.createElement("td");
+  const metodepembayaran = document.createElement("td");
+  const waktu = document.createElement("td");
+  const total = document.createElement("td");
 
   
+  if (riwayat == "-"){
+    jenisTransaksi.innerText = "-";
+    waktu.innerText = "-";
+    metodepembayaran.innerText = "-";
+    total.innerText = "-";
+  } else {
+    jenisTransaksi.innerText = datacategory;
+    metodepembayaran.innerText = "E-CIA";
+    waktu.innerText = riwayat.waktu;
+    total.innerText = riwayat.nominal;
+  }
+
+  trEl.appendChild(jenisTransaksi);
+  trEl.appendChild(metodepembayaran);
+  trEl.appendChild(waktu);
+  trEl.appendChild(total);
+
+  bodyTableriwayat.append(trEl);
+}

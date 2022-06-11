@@ -9,7 +9,7 @@ function parseJwt (token) {
 
 // Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
-if(ecia==null||!ecia || ecia==undefined){
+if(ecia==null||!ecia || ecia == undefined){
   window.location.href = "login.html"
  }
 
@@ -31,54 +31,50 @@ const idku = document.querySelector("#Idku")
 const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
-    // ini URL
-    var url = "http://localhost:8000/api/profile/" 
+// ini URL
+var url = "http://localhost:8000/api/profile/" 
 
-    // Ini data yang mau dikirimin ke url
-    var raw = "";
+// Ini data yang mau dikirimin ke url
+var raw = "";
 
 
-    // Ini dari postman
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      // body: raw,
-      redirect: 'follow'
-    };
+// Ini dari postman
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  // body: raw,
+  redirect: 'follow'
+};
 
-    // Ini buat nge fetch (JANGAN Diilangin)
-    async function getResponse(){
-      try {
-          let res = await fetch(url, requestOptions)
-          console.log("Fetch berhasil");
-          return await (res.text());
-      } catch(error) {
-          console.log('error', error)
-      };
-    }
+// Ini buat nge fetch (JANGAN Diilangin)
+async function getResponse(){
+  try {
+      let res = await fetch(url, requestOptions)
+      console.log("Fetch berhasil");
+      return await (res.text());
+  } catch(error) {
+      console.log('error', error)
+  };
+}
 
-    // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
-    async function getData(){
-      let data = await getResponse();
-console.log(data)
-      var dataJSON =JSON.parse(data);
-      console.log(dataJSON)
+// Ini buat setelah nge fetch (JANGAN diilangin 2.0)
+async function getData(){
+  let data = await getResponse();
+  var dataJSON =JSON.parse(data);
 
-        var idkita = dataJSON.id_user
-        idku.innerText = idkita
-        var saldokita = dataJSON.jumlah
-        saldo.innerText = saldokita
-        var walletkita = dataJSON.nomor_wallet
-        wallet.innerText = walletkita
-      
-      
-      
-      // Ini kalau status nya 400 (ga berhasil)
-      if(dataJSON.status == 400){
-          // ini buat ambil data "message" dari hasil fetch
-          alert(dataJSON.message);
-      }
-    };
+  var idkita = dataJSON.id_user
+  idku.innerText = idkita
+  var saldokita = dataJSON.jumlah
+  saldo.innerText = saldokita
+  var walletkita = dataJSON.nomor_wallet
+  wallet.innerText = walletkita
+  
+  // Ini kalau status nya 400 (ga berhasil)
+  if(dataJSON.status == 400){
+      // ini buat ambil data "message" dari hasil fetch
+      alert(dataJSON.message);
+  }
+};
 
-    // ini buat jalanin getData (Jangan diilangin 3.0)
-    getData();
+// ini buat jalanin getData (Jangan diilangin 3.0)
+getData();
