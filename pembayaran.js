@@ -1,55 +1,105 @@
-//pembayaran
-const ecia = JSON.stringify(localStorage.getItem('ecia'));
-window.localStorage.setItem('ecia', ecia.token);
+function parseJwt (token) {
+  var base64 = token.split('.')[1];
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
 
+  return JSON.stringify(jsonPayload);
+};
+
+// Ambil data cookie
+const ecia = JSON.stringify(localStorage.getItem('ecia'));
+if(ecia==null||!ecia){
+  window.location.href = "awal.html"
+ }
+
+// Ambil Data Token
+var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+
+// Untuk Fetch
 var myHeaders = new Headers();
-myHeaders.append("Authorization", "BEARER " + ecia);
+
+// Buat variabel token
+var token = ("Bearer " + ecia).replace(/\"/g, "");
+
+// Ini dari postman
+myHeaders.append("Authorization", token);
 myHeaders.append("Content-Type", "application/json");
 
-const jumlah = document.querySelector("#jumlah");
-// const nomor_wallet_client = document.querySelector("#no_wallet_client");
-// const nomor_wallet_ecommerce = document.querySelector("#no_wallet_ecomerc");
+// Ini cocokin dari HTML
+const id_user = document.querySelector("#pembayaranku")
+const nominal = document.querySelector("#nominalku");
 const buttonSubmit = document.querySelector("#submit");
 
+// Ini kalo mencet submit
 buttonSubmit.addEventListener("click", (e) => {
-  e.preventDefault(); // mencegah refresh
+    e.preventDefault(); // mencegah refresh
 
-var raw = "";
+    // ini URL
+    var url = "http://localhost:8000/api/pembelian/" 
 
-var requestOptions = {
-  method: 'GET',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
+    // Ini data yang mau dikirimin ke url
+    var raw = JSON.stringify({
+      id_user: dataToken.id_user,
+      nama_barang : "listrik",
+      harga: nominal.value ,
+      nomor_wallet: dataToken.nomor_wallet
+    });
+    
+    // Ini dari postman
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
 
-fetch("https://api-ecia.herokuapp.com/api/pembelian/6", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
+    // Ini buat nge fetch (JANGAN Diilangin)
+    async function getResponse(){
+      try {
+          let res = await fetch(url, requestOptions)
+          console.log("Fetch berhasil");
+          return await (res.text());
+      } catch(error) {
+          console.log('error', error)
+      };
+    }
 
-//Transaksi
+    // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
+    async function getData(){
+      let data = await getResponse();
 
-var myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+      var dataJSON = JSON.parse(data);
 
-var raw = JSON.stringify({
-  jumlah: jumlah.value,
-  nomor_wallet_client: walletClient.value,
-  nomor_wallet_ecommerce: wallet.value,
-  referensi: referensi.value
-});
+      // Ini kalau status nya 200 (berhasil Top Up)
+      if(dataJSON.status == 200){
+        var raw = JSON.stringify({
+          jumlah: nominal.value,
+          nomor_wallet_client: dataToken.nomor_wallet,
+          nomor_wallet_ecommerce: "blablbalbla",
+          referensi: dataJSON.id_pemesanan
+        });
+        
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+        
+        fetch("http://localhost:8000/api/transaksi", requestOptions)
+        .then(response => alert("pembayaran berhasil"))
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+      }
+      
+      // Ini kalau status nya 400 (ga berhasil)
+      if(dataJSON.status == 400){
+          // ini buat ambil data "message" dari hasil fetch
+          alert(dataJSON.message);
+      }
+    };
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
-
-fetch("https://api-ecia.herokuapp.com/api/transaksi", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-
+    // ini buat jalanin getData (Jangan diilangin 3.0)
+    getData();
 })
