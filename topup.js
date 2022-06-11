@@ -36,7 +36,7 @@ buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
     // ini URL
-    var url = "http://localhost:8000/api/profile/" + id_user.value
+    var url = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
@@ -71,12 +71,14 @@ buttonSubmit.addEventListener("click", (e) => {
       // Ini kalau status nya 200 (berhasil Top Up)
       if(dataJSON.status == 200){
           alert("Top Up berhasil")
+          location.href="saldo2.html"
       }
       
       // Ini kalau status nya 400 (ga berhasil)
       if(dataJSON.status == 400){
           // ini buat ambil data "message" dari hasil fetch
           alert(dataJSON.message);
+          location.href="topup.html"
       }
     };
 

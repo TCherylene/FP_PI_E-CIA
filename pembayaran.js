@@ -36,7 +36,9 @@ buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
     // ini URL
-    var url = "http://localhost:8000/api/pembelian/" 
+    var url = "https://api-ecia.herokuapp.com/api/pembelian/" 
+    // var url = "http://localhost:8000/api/pembelian/" 
+
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
@@ -87,8 +89,18 @@ buttonSubmit.addEventListener("click", (e) => {
           redirect: 'follow'
         };
         
-        fetch("http://localhost:8000/api/transaksi", requestOptions)
-        .then(response => alert("pembayaran berhasil"))
+        fetch("https://api-ecia.herokuapp.com/api/transaksi", requestOptions)
+        .then(response  =>{
+          if(response.status==200){
+            alert("pembayaran berhasil")
+            location.href="saldo2.html"
+          }
+          else {
+            alert(response.message)
+            location.href="pembayaran2.html"
+          }
+      } )
+
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
       }

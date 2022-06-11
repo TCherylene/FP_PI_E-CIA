@@ -36,7 +36,7 @@ function parseJwt (token) {
       e.preventDefault(); // mencegah refresh
   
       // ini URL
-      var url = "http://localhost:8000/api/transfer/" 
+      var url = "https://api-ecia.herokuapp.com/api/transfer/" 
   
       // Ini data yang mau dikirimin ke url
       var raw = JSON.stringify({
@@ -72,12 +72,14 @@ function parseJwt (token) {
         // Ini kalau status nya 200 (berhasil Top Up)
         if(dataJSON.status == 200){
             alert(dataJSON.message)
+            location.href="saldo2.html"
         }
         
         // Ini kalau status nya 400 (ga berhasil)
         if(dataJSON.status == 400){
             // ini buat ambil data "message" dari hasil fetch
-            alert(dataJSON.message);
+            alert(dataJSON.message)
+            location.href="transfer.html"
         }
       };
   

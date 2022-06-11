@@ -32,7 +32,8 @@ const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
 // ini URL
-var url = "http://localhost:8000/api/profile/" 
+var url = "https://api-ecia.herokuapp.com/api/profile/" 
+// var url = "http://localhost:8000/api/profile/" 
 
 // Ini data yang mau dikirimin ke url
 var raw = "";

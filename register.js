@@ -1,4 +1,6 @@
-var url = "http://localhost:8000/api/profile";
+var url = "https://api-ecia.herokuapp.com/api/profile";
+// var url = "http://localhost:8000/api/profile";
+
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");

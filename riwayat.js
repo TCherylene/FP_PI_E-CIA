@@ -30,10 +30,10 @@ myHeaders.append("Content-Type", "application/json");
 const saldoAkhir = document.querySelector("#saldoAkhir")
 
 // ini URL
-// var url1 = "https://api-ecia.herokuapp.com/api/riwayat"
-//var url2 = "https://api-ecia.herokuapp.com/api/profile"
-var url1 = "http://localhost:8000/api/riwayat"
-var url2 = "http://localhost:8000/api/profile"
+var url1 = "https://api-ecia.herokuapp.com/api/riwayat"
+var url2 = "https://api-ecia.herokuapp.com/api/profile"
+// var url1 = "http://localhost:8000/api/riwayat"
+// var url2 = "http://localhost:8000/api/profile"
 
 // Ini dari postman
 var requestOptions = {
@@ -116,25 +116,21 @@ function createTable(datacategory, riwayat){
 
   const jenisTransaksi = document.createElement("td");
   const metodepembayaran = document.createElement("td");
-  const waktu = document.createElement("td");
   const total = document.createElement("td");
 
   
   if (riwayat == "-"){
     jenisTransaksi.innerText = "-";
-    waktu.innerText = "-";
     metodepembayaran.innerText = "-";
     total.innerText = "-";
   } else {
     jenisTransaksi.innerText = datacategory;
     metodepembayaran.innerText = "E-CIA";
-    waktu.innerText = riwayat.waktu;
     total.innerText = riwayat.nominal;
   }
 
   trEl.appendChild(jenisTransaksi);
   trEl.appendChild(metodepembayaran);
-  trEl.appendChild(waktu);
   trEl.appendChild(total);
 
   bodyTableriwayat.append(trEl);
