@@ -32,7 +32,7 @@ buttonSubmit.addEventListener("click", (e) => {
         name: nama.value,
         email: email.value,
         password: pass.value,
-        balance: 0
+        balance: 10000
     });
 
     var requestOptions2 = {
