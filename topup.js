@@ -27,6 +27,7 @@ myHeaders.append("Authorization", token);
 myHeaders.append("Content-Type", "application/json");
 
 // Ini cocokin dari HTML
+const pembayaran = document.querySelector("#pembayaran")
 const id_user = document.querySelector("#id_user")
 const nominal = document.querySelector("#nominal");
 const buttonSubmit = document.querySelector("#submit");
@@ -34,6 +35,8 @@ const buttonSubmit = document.querySelector("#submit");
 // Ini kalo mencet submit
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
+
+    var value = pembayaran.options[pembayaran.selectIndex].value ;
 
     // ini URL
     var url  = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
