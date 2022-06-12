@@ -9,22 +9,15 @@ function parseJwt (token) {
 
 // Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
-if(ecia==null||!ecia){
-  window.location.href = "login.html"
- }
-
-// Ambil Data Token
-var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+const abad = JSON.stringify(localStorage.getItem('abad'));
+const sarah = JSON.stringify(localStorage.getItem('sarah'));
 
 // Untuk Fetch
 var myHeaders = new Headers();
 
-// Buat variabel token
-var token = ("Bearer " + ecia).replace(/\"/g, "");
+// Ambil Data Token
+var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
 
-// Ini dari postman
-myHeaders.append("Authorization", token);
-myHeaders.append("Content-Type", "application/json");
 
 // Ini cocokin dari HTML
 const pembayaran = document.querySelector("#pembayaran")
@@ -39,7 +32,25 @@ buttonSubmit.addEventListener("click", (e) => {
     var value = pembayaran.options[pembayaran.selectIndex].value ;
 
     // ini URL
-    var url  = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
+    if (value == "ecia"){
+      // Buat variabel token
+      var token = ("Bearer " + ecia).replace(/\"/g, "");
+      var url = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
+    }
+
+    if(value == "Metakantin"){
+      var token = ("Bearer " + abad).replace(/\"/g, "");
+      var url = "https://met4kantin.herokuapp.com/api/profile/:"
+    }
+
+    if(value == "Moneygo"){
+      var token = ("Bearer " + sarah).replace(/\"/g, "");
+      var url = "https://moneygo-api.herokuapp.com/api/topup"
+    }
+    
+    // Ini dari postman
+    myHeaders.append("Authorization", token);
+    myHeaders.append("Content-Type", "application/json");
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
