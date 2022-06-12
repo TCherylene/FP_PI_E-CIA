@@ -9,9 +9,6 @@ function parseJwt (token) {
 
 // Ambil data cookie
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
-if(ecia==null||!ecia){
-  window.location.href = "awal.html"
- }
 
 // Ambil Data Token
 var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
@@ -29,21 +26,17 @@ myHeaders.append("Content-Type", "application/json");
 // Ini cocokin dari HTML
 const id_user = document.querySelector("#pembayaranku")
 const nominal = document.querySelector("#nominalku");
-const buttonSubmit = document.querySelector("#submit");
+const buttonSubmit = document.querySelector("#bayar");
 
-// Ini kalo mencet submit
 buttonSubmit.addEventListener("click", (e) => {
-    e.preventDefault(); // mencegah refresh
-
     // ini URL
+    e.preventDefault();
     var url = "https://api-ecia.herokuapp.com/api/pembelian/" 
-    // var url = "http://localhost:8000/api/pembelian/" 
-
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
       id_user: dataToken.id_user,
-      nama_barang : "listrik",
+      nama_barang : "pulsa",
       harga: nominal.value ,
       nomor_wallet: dataToken.nomor_wallet
     });
@@ -114,4 +107,5 @@ buttonSubmit.addEventListener("click", (e) => {
 
     // ini buat jalanin getData (Jangan diilangin 3.0)
     getData();
-})
+  }
+)}

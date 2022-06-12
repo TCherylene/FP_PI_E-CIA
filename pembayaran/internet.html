@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+    <title>E-CIA</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+  
+    <!-- Favicons -->
+    <!-- <link href="assets/img/favicon.png" rel="icon"> -->
+    <link href="assets/img/ecia.png" rel="apple-touch-icon">
+  
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="css/footer.css">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet"> 
+
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script> 
+    <script>  
+      $(function(){ 
+        // $("#header").load("header.html");  
+        $("#footer").load("footer.html");  
+      }); 
+    </script>  
+
+    <style>
+      .container-value{
+        height: 250px;
+        width: 400px;
+        display:inline-block;
+        padding: 25px;
+      }
+
+      form {
+        overflow:hidden;
+      }
+
+      .email, .nominal, .pembayaran, .choose-pembayaran{
+        display: block;
+        text-align: left; 
+      }
+
+      input {
+        width: calc(100%);
+      }
+      
+      button {
+        width: calc(20% - 20px);
+      }
+  #fontspembayaran{
+    font-family: "Raleway", sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+  }
+
+    </style>
+  </head>
+  
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <h1><a href="home.html">E-CIA<span>.</span></a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="home.html">HOME</a></li>
+          <li><a class="nav-link scrollto" href="topup.html">TOP UP</a></li>
+          <li><a class="nav-link scrollto" href="pembayaran.html">PEMBAYARAN</a></li>
+          <li><a class="nav-link scrollto" href="transfer.html">TRANSFER</a></li>
+          <li><a class="nav-link scrollto" href="riwayat.html">RIWAYAT</a></li>
+          <li><a class="nav-link scrollto" href="saldo.html">SALDO</a></li>
+          <li><a class="nav-link scrollto" id = "logout">LOG OUT</a></li>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+  <div class="text-center">
+    <br>
+    <div class="mb-5"></div>
+    <h3 class="mb-5" id="fontspembayaran" >Pembayaran</h3>
+    <form action="#" method="post">
+      <div class="container-value">
+      <div class="mb-3"> 
+        <label for="pembayaran" class="pembayaran">Nomor Pelanggan :</label>
+        <input id="pembayaranku" type="text">
+      </div>
+      <div class="mb-3">
+        <label for="nominal" class="nominal">Nominal :</label>
+        <input id="nominalku" type="text">
+      </div>
+      <div class="mb-3">
+          <label for="pembayaran" class="pembayaran">Metode Pembayaran : </label>
+          <select id="pembayaran" class="choose-pembayaran">
+          <option value="transfer">Transfer Bank</option>
+          <option value="gopay">Gopay</option>
+          <option value="ovo">OVO</option>
+          <option value="dana" selected>Dana</option>
+        </select></div>
+      </div> 
+        <br>
+        <div class="text-center">
+              <br>
+              <button type="submit" a href="register.html" id="bayar" class="button button2">Bayar</button>
+          </div>
+        </div>
+      </div>
+      </form>
+      <br>
+  </div>
+<!-- ======= Footer ======= -->
+<!-- Site footer -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <h6><b> Developers </b></h6>
+        <p id="footer-text">  
+          Alda Risma Harjian &emsp;&nbsp;5027201004 <br>
+          Sharira Saniane &emsp;&emsp;&ensp;&nbsp;5027201016 <br>
+          Cherylene Trevina &emsp;&ensp;&nbsp;5027201033
+        </p>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div class="container">
+    <p class="copyright-text">Copyright &copy; 2022
+          <a href="home.html">E-CIA</a>.
+  </div>
+</footer>
+</body>
+        <script src="pembayaran.js"> </script>
+        <script src = "logout.js"></script>
+        <!-- <script src="jquery.min.js"></script>
+        <script src="jquery.mask.min.js"></script> -->
+</html>
