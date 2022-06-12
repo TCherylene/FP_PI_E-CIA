@@ -13,7 +13,7 @@ const abad = JSON.stringify(localStorage.getItem('abad'));
 const sarah = JSON.stringify(localStorage.getItem('sarah'));
 
 // Ambil Data Token
-var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+var dataToken = JSON.parse(JSON.parse(parseJwt(sarah))).rows[0]
 
 // Untuk Fetch
 var myHeaders = new Headers();
@@ -31,11 +31,8 @@ const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
 // ini URL
-var url = "https://moneygo-api.herokuapp.com/api" 
+var url = "https://moneygo-api.herokuapp.com/api/profile" 
 // var url = "http://localhost:8000/api/profile/" 
-
-// Ini data yang mau dikirimin ke url
-var raw = "";
 
 // Ini dari postman
 var requestOptions = {
@@ -58,15 +55,15 @@ async function getResponse(){
 // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
 async function getData(){
   let data = await getResponse();
-  var dataJSON =JSON.parse(data.data);
+  var dataJSON =JSON.parse(data);
 
-  var idkita = dataJSON.id
+  var idkita = dataToken.id
   idku.innerText = idkita
 
   var saldokita = dataJSON.balance
   saldo.innerText = saldokita
 
-  var walletkita = dataJSON.id
+  var walletkita = dataToken.id
   wallet.innerText = walletkita
   
   // Ini kalau status nya 400 (ga berhasil)

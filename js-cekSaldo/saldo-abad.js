@@ -13,7 +13,7 @@ const abad = JSON.stringify(localStorage.getItem('abad'));
 const sarah = JSON.stringify(localStorage.getItem('sarah'));
 
 // Ambil Data Token
-var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
 
 // Untuk Fetch
 var myHeaders = new Headers();
@@ -58,9 +58,9 @@ async function getResponse(){
 // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
 async function getData(){
   let data = await getResponse();
-  var dataJSON =JSON.parse(data.data);
+  var dataJSON =JSON.parse(data).data;
 
-  var idkita = dataJSON.uid
+  var idkita = dataToken.id
   idku.innerText = idkita
 
   var saldokita = dataJSON.cash

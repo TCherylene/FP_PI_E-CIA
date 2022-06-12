@@ -18,7 +18,6 @@ var myHeaders = new Headers();
 // Ambil Data Token
 var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
 
-
 // Ini cocokin dari HTML
 const pembayaran = document.querySelector("#pembayaran")
 const id_user = document.querySelector("#id_user")
@@ -29,23 +28,27 @@ const buttonSubmit = document.querySelector("#submit");
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
-    var value = pembayaran.options[pembayaran.selectIndex].value ;
-
+    var value = pembayaran.options[pembayaran.selectedIndex].value;
+    console.log(value)
+      
     // ini URL
     if (value == "ecia"){
       // Buat variabel token
       var token = ("Bearer " + ecia).replace(/\"/g, "");
       var url = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
+      var halamanbaru = "ecia.html"
     }
 
     if(value == "Metakantin"){
       var token = ("Bearer " + abad).replace(/\"/g, "");
       var url = "https://met4kantin.herokuapp.com/api/profile/:"
+      var halamanbaru = "metakantin.html"
     }
 
     if(value == "Moneygo"){
       var token = ("Bearer " + sarah).replace(/\"/g, "");
       var url = "https://moneygo-api.herokuapp.com/api/topup"
+      var halamanbaru = "moneygo.html"
     }
     
     // Ini dari postman
@@ -54,7 +57,8 @@ buttonSubmit.addEventListener("click", (e) => {
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
-      jumlah: nominal.value
+      jumlah: nominal.value,
+      balance: nominal.value
     });
     
     // Ini dari postman
@@ -85,7 +89,7 @@ buttonSubmit.addEventListener("click", (e) => {
       // Ini kalau status nya 200 (berhasil Top Up)
       if(dataJSON.status == 200){
           alert("Top Up berhasil")
-          location.href="saldo2.html"
+          location.href = halamanbaru;
       }
       
       // Ini kalau status nya 400 (ga berhasil)
