@@ -108,4 +108,4 @@ buttonSubmit.addEventListener("click", (e) => {
     // ini buat jalanin getData (Jangan diilangin 3.0)
     getData();
   }
-)}
+)
