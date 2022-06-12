@@ -20,7 +20,10 @@ Hal-hal yang bisa dilakukan dalam API E-CIA:
 | POST | /login | [login](#login) | Untuk masuk ke akun dan mendapatkan token |
 | GET | /profile | [cek-profil](#cek-profil) |Untuk mendapatkan informasi akun (id, nama, email, pass, jumlah, nomor_wallet) |
 | PUT | /profile/:id | [top up](#top-up) | Untuk melakukan top up |
-| POST | /pembelian | [pembelian](#pembelian) | Untuk melakukan pembayaran terhadap suatu barang/layanan |
+| POST | /pembelian | [pembelian](#pembelian) | Untuk melakukan pembelian (pemesanan) terhadap suatu barang/layanan |
+| GET | /pembelian/:id_user | [cek pembelian](#cek-pembelian) | Untuk mengecek status/pembayaran apa saja yang telah dilakukan |
+| GET | /pembelian/:id_user/:id_pembelian | [cek pembelian(id)](#cek-pembelian-berdasarkan-id-pembelian) | Untuk mengecek status/pembayaran pada id_pembelian tertentu |
+| POST | /transaksi | [transaksi](#transaksi) | Untuk melakukan pembayaran terhadap pembelian yang sudah dilakukan |
 | POST | /transfer | [transfer](#transfer) | Untuk melakukan transfer kepada user lain |
 | GET | /riwayat | [riwayat](#riwayat--history) | Untuk menampilkan history transaksi |
 
@@ -56,16 +59,24 @@ Body:
 
 Response:
 
-![Response email baru](https://user-images.githubusercontent.com/77750276/171909287-5958ee20-88eb-4cd6-8c32-9f6b78825cb4.png)
+```json
+{
+    "status": 200,
+    "message": "Pendaftaran berhasil"
+}
+```
 
 #### Response yang bisa didapatkan
+
 | Status | Message |
 | --- | --- |
 | 200 | Pendaftaran berhasil |
 | 400 | Email, pass dan name tidak boleh kosong |
 | 400 | Email telah terdaftar |
+| 500 | Server Error |
 
 ---
+
 ### Login
 
 `POST` https://api-ecia.herokuapp.com/api/login
@@ -81,7 +92,7 @@ Properties:
 | email | Email yang digunakan untuk masuk ke E-CIA |
 | pass | Password akun (tidak ada ketentuan) |
 
-#### Contoh 1: (Email ditemukan)
+#### Contoh: (Email ditemukan)
 
 Body:
 
@@ -100,9 +111,10 @@ Response:
 
 | Status | Message |
 | --- | --- |
-| 200 | Mendapatkan `token` dengan object: `token` |
+| 200 | Mendapatkan `token` |
 | 400 | Email atau password salah |
 | 400 | Email dan pass tidak boleh kosong |
+| 500 | Server Error |
 
 ---
 
@@ -117,7 +129,26 @@ Properties:
 * Body (JSON): -
 
 Contoh response:
-![Cek profile](https://user-images.githubusercontent.com/77750276/171910592-094993e1-b377-452c-8906-d211ce9924c0.png)
+
+```json
+{
+    "id_user": 5,
+    "name": "Test",
+    "pass": "test1234",
+    "email": "test@test.com",
+    "jumlah": 0,
+    "nomor_wallet": "bd21334d62a8d6512a0f5798d7c0cf08"
+}
+```
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Data (sesuai contoh response) |
+| 400 | Masukkan token |
+| 400 | Token tidak valid |
+| 500 | Server Error |
 
 ---
 
@@ -153,6 +184,169 @@ Properties:
 
 ---
 
+### Pembelian
+
+`POST` https://api-ecia.herokuapp.com/api/pembelian
+
+Properties
+
+* Params: -
+* Authorization: `BEARER <token>`
+* Body (JSON):
+
+| Object | Keterangan |
+| --- | --- |
+| id_user | Id user yang ingin melakukan pembayaran |
+| nama_barang | Nama barang/layanan yang ingin dibayar |
+| harga | Harga dari barang/layanan yang ingin dibayar |
+| nomor_wallet | Nomor wallet dari user |
+
+> `nomor_wallet` dapat didapatkan [di sini](#cek-profil)
+
+Contoh Response:
+
+```json
+{
+    "status": 200,
+    "id_pemesanan": 4,
+    "message": "Pembelian berhasil, silahkan lanjutkan pembayaran dengan mengkonfirmasi pembayaran pada ewallet Anda"
+}
+```
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Pembayaran berhasil |
+| 400 | Masukkan token |
+| 400 | Token tidak valid |
+| 400 | Masukkan id_user |
+| 400 | Harga harus lebih dari 0 |
+| 400 | Masukkan nomor_wallet |
+| 400 | Masukkan nama_barang dan harga |
+| 400 | Nomor wallet salah |
+| 400 | Saldo anda tidak mencukupi |
+| 400 | Anda tidak dapat mengakses halaman ini |
+| 500 | Server Error |
+
+> Untuk status terakhir `Anda tidak dapat mengakses halaman ini`, berlaku ketika user melakukan pembayaran dengan id user lain
+>
+> Admin dapat melakukan pembayaran untuk user lain
+---
+
+### Cek Pembelian
+
+`GET` https://api-ecia.herokuapp.com/api/pembelian/:id_user
+
+Properties
+
+* Params: `id_user`
+  > Pengecekan untuk id_user berbeda hanya bisa dilakukan oleh admin
+* Authorization: `BEARER <token>`
+
+Contoh response:
+
+```json
+{
+    "status": 200,
+    "data":[
+        "id_user":3,
+        "id_pembelian":4,
+        "nama_barang": "blablabla",
+        "status": "PembayaranBerhasil"
+    ]
+}
+```
+
+Status: (pada data)
+
+* MenungguPembayaran
+* PembayaranBerhasil
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Berhasil & memberikan data |
+| 400 | Masukkan token |
+| 400 | Token tidak valid |
+| 400 | Anda tidak dapat mengakses halaman ini |
+
+---
+
+### Cek Pembelian Berdasarkan ID Pembelian
+
+`GET` https://api-ecia.herokuapp.com/api/pembelian/:id_user/:id_pembelian
+
+Properties
+
+* Params: `id_user`, `id_pembelian`
+  > Pengecekan untuk id_user berbeda hanya bisa dilakukan oleh admin
+* Authorization: `BEARER <token>`
+
+Contoh response:
+
+```json
+{
+    "status": 200,
+    "data":[
+        {
+            "id_user":3,
+            "id_pembelian":4,
+            "nama_barang": "blablabla",
+            "harga": 400000,
+            "wallet": "ecia",
+            "nomor_wallet": "abcdefg",
+            "status": "PembayaranBerhasil"
+        }
+    ]
+}
+```
+
+Status: (pada data)
+
+* MenungguPembayaran
+* PembayaranBerhasil
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Berhasil & memberikan data |
+| 400 | Masukkan token |
+| 400 | Token tidak valid |
+| 400 | Anda tidak dapat mengakses halaman ini |
+
+---
+
+### Transaksi
+
+`POST` https://api-ecia.herokuapp.com/api/transaksi
+
+Properties
+
+* Params: -
+* Authorization: -
+* Body (JSON):
+
+| Object | Keterangan |
+| --- | --- |
+| jumlah | Harga dari barang |
+| nomor_wallet_client | Nomor wallet client (didapatkan dari get profile) |
+| nomor_wallet_ecommerce | Nomor wallet ecommerce |
+| referensi | Referensi pembayaran (sesuai dengan [id pemesanan](#cek-pembelian-berdasarkan-id-pembelian)) |
+
+#### Response yang dapat diterima
+
+| Status | Message |
+| --- | --- |
+| 200 | Permintaan pembayaran berhasil |
+| 400 | Nomor wallet atau nomor referensi tidak ditemukan |
+| 400 | Pembayaran sudah selesai (status pembayaran = PembayaranSelesai) |
+| 400 | Saldo anda tidak cukup |
+
+---
+
 ### Transfer
 
 `POST` https://api-ecia.herokuapp.com/api/transfer
@@ -184,43 +378,6 @@ Properties
 
 ---
 
-### Pembelian
-
-`POST` https://api-ecia.herokuapp.com/api/pembelian
-
-Properties
-
-* Params: -
-* Authorization: `BEARER <token>`
-* Body (JSON):
-
-| Object | Keterangan |
-| --- | --- |
-| id_user | Id user yang ingin melakukan pembayaran (opsional)|
-| nama_barang | Nama barang/layanan yang ingin dibayar |
-| harga | Harga dari barang/layanan yang ingin dibayar | 
-| nomor_wallet | Nomor wallet dari user |
-
-> `nomor_wallet` dapat didapatkan [di sini](#cek-profil)
-
-#### Response yang dapat diterima
-
-| Status | Message |
-| --- | --- |
-| 200 | Pembayaran berhasil |
-| 400 | Masukkan token |
-| 400 | Token tidak valid |
-| 400 | Nama_barang dan harga tidak boleh kosong |
-| 400 | harga harus lebih dari 0 |
-| 400 | Masukkan nomor_wallet |
-| 400 | Nomor wallet salah |
-| 400 | Saldo anda tidak mencukupi |
-| 400 | Anda tidak dapat mengakses halaman ini |
-
-> Untuk status terakhir `Anda tidak dapat mengakses halaman ini`, berlaku ketika user melakukan pembayaran dengan id user lain
-> Admin dapat melakukan pembayaran untuk user lain
----
-
 ### Riwayat / History
 
 `GET` https://api-ecia.herokuapp.com/api/riwayat
@@ -239,6 +396,7 @@ Properties
 | 200 | User belum pernah melakukan transaksi | Jika user tidak pernah melakukan transaksi pada seluruh layanan (topup, bayar, dan transfer) |
 | 400 | Masukkan token |
 | 400 | Token tidak valid |
+| 500 | Server Error |
 
 #### Contoh response
 
