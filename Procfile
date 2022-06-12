@@ -1,1 +1,1 @@
-awal.html
+index.html
