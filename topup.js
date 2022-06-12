@@ -15,9 +15,6 @@ const sarah = JSON.stringify(localStorage.getItem('sarah'));
 // Untuk Fetch
 var myHeaders = new Headers();
 
-// Ambil Data Token
-var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
-
 // Ini cocokin dari HTML
 const pembayaran = document.querySelector("#pembayaran")
 const id_user = document.querySelector("#id_user")
@@ -40,8 +37,11 @@ buttonSubmit.addEventListener("click", (e) => {
     }
 
     if(value == "Metakantin"){
+      // Ambil Data Token
+      var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
+
       var token = ("Bearer " + abad).replace(/\"/g, "");
-      var url = "https://met4kantin.herokuapp.com/api/profile/:"
+      var url = "https://met4kantin.herokuapp.com/api/profile/" + dataToken.uid.replace(/\"/g, "");
       var halamanbaru = "metakantin.html"
     }
 
