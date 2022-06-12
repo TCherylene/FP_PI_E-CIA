@@ -26,7 +26,6 @@ buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
     var value = pembayaran.options[pembayaran.selectedIndex].value;
-    console.log(value)
       
     // ini URL
     if (value == "ecia"){
