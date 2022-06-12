@@ -19,7 +19,7 @@ var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
 var myHeaders = new Headers();
 
 // Buat variabel token
-var token = ("Bearer " + ecia).replace(/\"/g, "");
+var token = ("Bearer " + abad).replace(/\"/g, "");
 
 // Ini dari postman
 myHeaders.append("Authorization", token);

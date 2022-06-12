@@ -36,7 +36,7 @@ buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
     // ini URL
-    var url = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
+    var url  = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
 
     // Ini data yang mau dikirimin ke url
     var raw = JSON.stringify({
