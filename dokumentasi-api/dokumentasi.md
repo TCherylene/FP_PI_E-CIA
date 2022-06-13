@@ -334,7 +334,7 @@ Properties
 | jumlah | Harga dari barang |
 | nomor_wallet_client | Nomor wallet client (didapatkan dari get profile) |
 | nomor_wallet_ecommerce | Nomor wallet ecommerce |
-| referensi | Referensi pembayaran (sesuai dengan [id pemesanan](#cek-pembelian-berdasarkan-id-pembelian)) |
+<!-- | referensi | Referensi pembayaran (sesuai dengan [**respons id_pemesanan**](#pembelian)) | -->
 
 #### Response yang dapat diterima
 
