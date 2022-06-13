@@ -105,7 +105,9 @@ async function getData1(url){
 
 // ini buat jalanin getData (Jangan diilangin 3.0)
 getData(url1);
-getData1(url2);
+
+// kalo mau nyalain saldo, tinggal buka ini:
+//getData1(url2);
 
 // Function untuk bikin tabel
 function createTableEcia(datacategory, riwayat){
@@ -118,7 +120,7 @@ function createTableEcia(datacategory, riwayat){
   const metodepembayaran = document.createElement("td");
   const total = document.createElement("td");
 
-  
+
   if (riwayat == "-"){
     jenisTransaksi.innerText = "-";
     metodepembayaran.innerText = "-";
@@ -126,7 +128,11 @@ function createTableEcia(datacategory, riwayat){
   } else {
     jenisTransaksi.innerText = datacategory;
     metodepembayaran.innerText = "E-CIA";
-    total.innerText = riwayat.nominal;
+    if(datacategory == "Pembelian"){
+      total.innerText = "-" + riwayat.nominal
+    } else {
+      total.innerText = riwayat.nominal;
+    }
   }
 
   trEl.appendChild(jenisTransaksi);
