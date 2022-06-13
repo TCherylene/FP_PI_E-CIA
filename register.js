@@ -50,11 +50,22 @@ buttonSubmit.addEventListener("click", (e) => {
         var dataJSONAbad = JSON.parse(dataAbad);
         
         if(dataJSONEcia.status == 200 && dataJSONAbad.status == 200 && dataJSONSarah.status == 200){
+            alert("Pendaftaran berhasil. Silahkan login.")
             window.location.href = "login.html";
         }
 
-        if(dataJSON.status == 400 && dataJSONAbad.status == 400 && dataJSONSarah.status == 400){
-            alert(dataJSON.message);
+        if(dataJSONEcia.status == 400 && dataJSONAbad.status == 400 && dataJSONSarah.status == 400){
+            if (dataJSONEcia.status == 400){
+                alert(dataJSONEcia.message)
+            }
+            
+            if (dataJSONAbad.status == 400){
+                alert(dataJSONAbad.message)
+            }
+
+            if (dataJSONSarah.status == 400){
+                alert(dataJSONSarah.message)
+            }
         }
     };
 

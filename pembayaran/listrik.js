@@ -37,14 +37,28 @@ buttonSubmit.addEventListener("click", (e) => {
       // Buat variabel token
       var token = ("Bearer " + ecia).replace(/\"/g, "");
       var url = "https://api-ecia.herokuapp.com/api/profile/" + id_user.value
-      var halamanbaru = "ecia.html"
+      var halamanbaru = "../ecia.html"
       var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+
+      var raw2 = JSON.stringify({
+        jumlah: nominal.value,
+        nomor_wallet_client: dataToken.nomor_wallet,
+        nomor_wallet_ecommerce: "blablbalbla",
+        referensi: dataJSON.id_pemesanan
+      });
+
+      var requestOptions2 = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
     }
 
     if(value == "Metakantin"){
       var token = ("Bearer " + abad).replace(/\"/g, "");
       var url = "https://met4kantin.herokuapp.com/api/pay/"
-      var halamanbaru = "metakantin.html"
+      var halamanbaru = "../metakantin.html"
       var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
     }
 
@@ -68,7 +82,7 @@ buttonSubmit.addEventListener("click", (e) => {
       harga: nominal.value ,
       nomor_wallet: dataToken.nomor_wallet
     });
-    
+  
     // Ini dari postman
     var requestOptions = {
       method: 'POST',
@@ -78,7 +92,7 @@ buttonSubmit.addEventListener("click", (e) => {
     };
 
     // Ini buat nge fetch (JANGAN Diilangin)
-    async function getResponse(){
+    async function getResponse(url, requestOptions){
       try {
           let res = await fetch(url, requestOptions)
           console.log("Fetch berhasil");
@@ -90,45 +104,30 @@ buttonSubmit.addEventListener("click", (e) => {
 
     // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
     async function getData(){
-      let data = await getResponse();
+      let data = await getResponse(url, requestOptions);
 
       var dataJSON = JSON.parse(data);
 
-      // Ini kalau status nya 200 (berhasil Top Up)
+      // Ini kalau status nya 200 (berhasil bayar)
       if(dataJSON.status == 200){
-        var raw = JSON.stringify({
-          jumlah: nominal.value,
-          nomor_wallet_client: dataToken.nomor_wallet,
-          nomor_wallet_ecommerce: "blablbalbla",
-          referensi: dataJSON.id_pemesanan
-        });
-        
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
-        };
-        
-        fetch("https://api-ecia.herokuapp.com/api/transaksi", requestOptions)
-        .then(response  =>{
-          if(response.status==200){
-            alert("pembayaran berhasil")
-            location.href=halamanbaru.html
-          }
-          else {
-            alert(response.message)
-            location.href="listrik.html"
-          }
-      } )
+        if(value == "ecia"){
+          let dataTransaksiEcia = await getResponse(url, requestOptions2);
 
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+          var dataJSONTransaksiEcia = JSON.parse(dataTransaksiEcia);
+
+          if(dataJSONTransaksiEcia.status == 200){
+            window.location.href = halamanbaru
+          } else {
+            alert("Terjadi kesalahan. Silahkan coba lagi");
+            window.location.href = "listrik.html"
+          }
+        }
+
+        window.location.href = halamanbaru
       }
       
       // Ini kalau status nya 400 (ga berhasil)
       if(dataJSON.status == 400){
-          // ini buat ambil data "message" dari hasil fetch
           alert(dataJSON.message);
       }
     };

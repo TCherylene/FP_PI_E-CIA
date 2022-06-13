@@ -10,8 +10,6 @@ const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 const buttonSubmit = document.querySelector("#submit");
 
-// email.innerText = (nilai yang mau ditampilkan disini) harus dideklrasi terlebih dahulu 
-
 buttonSubmit.addEventListener("click", (e) => {
     e.preventDefault(); // mencegah refresh
 
@@ -58,7 +56,17 @@ buttonSubmit.addEventListener("click", (e) => {
         }
 
         if(dataJSONEcia.status == 400 || dataJSONSarah.error == true || dataJSONAbad.status == 400){
-            alert("Terdapat kesalahan silahkan coba lagi");
+            if (dataJSONEcia.status == 400){
+                alert(dataJSONEcia.message)
+            }
+            
+            if (dataJSONAbad.status == 400){
+                alert(dataJSONAbad.message)
+            }
+
+            if (dataJSONSarah.status == 400){
+                alert(dataJSONSarah.message)
+            }
         }
     };
 
