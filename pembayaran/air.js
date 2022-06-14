@@ -75,12 +75,24 @@ buttonSubmit.addEventListener("click", (e) => {
       }  
     }
 
-    // if(value == "Moneygo"){
-    //   var token = ("Bearer " + sarah).replace(/\"/g, "");
-    //   var url = "https://moneygo-api.herokuapp.com/api/topup"
-    //   var halamanbaru = "../moneygo.html"
-    //   var dataToken = JSON.parse(JSON.parse(parseJwt(sarah)))
-    // }
+    if(value == "Moneygo"){
+      var token = ("Bearer " + sarah).replace(/\"/g, "");
+      var url = "https://moneygo-api.herokuapp.com/api/transaksi"
+      var halamanbaru = "../moneygo.html"
+      var dataToken = JSON.parse(JSON.parse(parseJwt(sarah)))
+
+      var raw = JSON.stringify({
+        balance: nominal.value 
+      });
+
+      // // Ini dari postman
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      }  
+    }
 
     if(value == "kelompok7"){
       var token = ("Bearer " + hilmi).replace(/\"/g, "");
