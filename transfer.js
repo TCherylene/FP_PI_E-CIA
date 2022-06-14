@@ -40,15 +40,6 @@ buttonSubmit.addEventListener("click", (e) => {
       var method = 'POST'
     }
 
-    // if(value == "Metakantin"){
-    //   // Ambil Data Token
-    //   var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
-
-    //   var token = ("Bearer " + abad).replace(/\"/g, "");
-    //   var url = "https://met4kantin.herokuapp.com/api/profile/" + dataToken.uid.replace(/\"/g, "");
-    //   var halamanbaru = "metakantin.html"
-    // }
-
     if(value == "Moneygo"){
       var token = ("Bearer " + sarah).replace(/\"/g, "");
       console.log(token);

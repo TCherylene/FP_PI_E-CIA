@@ -134,11 +134,12 @@ buttonSubmit.addEventListener("click", (e) => {
       
       if(data == "Not enough balance !"){
         alert(data)
-      }
+      } else {
+        var dataJSON = JSON.parse(data);
 
-      var dataJSON = JSON.parse(data);
-      if (value == "kelompok7"){
-        dataJSON = data
+        if(value == "kelompok7"){
+          window.location.href = "../e-gil.html"
+        }
       }
       
       // console.log(dataJSON)

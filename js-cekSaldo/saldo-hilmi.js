@@ -23,8 +23,7 @@ var token = ("Bearer " + hilmi).replace(/\"/g, "");
 myHeaders.append("Authorization", token);
 myHeaders.append("Content-Type", "application/json");
 
-// Ini cocokin dari HTML
-const idku = document.querySelector("#Idku")
+// Ini cocokin dari HTML  
 const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
@@ -60,13 +59,9 @@ async function getData(){
   let data = await getResponse();
   var dataJSON =JSON.parse(data);
 
-  var idkita = dataJSON.username
-  idku.innerText = idkita
   var saldokita = dataJSON.balance
   saldo.innerText = saldokita
-  var walletkita = dataJSON.username
-  wallet.innerText = walletkita
-  
+
   // Ini kalau status nya 400 (ga berhasil)
   if(dataJSON.status == 400){
       // ini buat ambil data "message" dari hasil fetch
