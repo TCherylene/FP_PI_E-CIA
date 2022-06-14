@@ -63,7 +63,7 @@ async function getData(){
   var saldokita = dataJSON.balance
   saldo.innerText = saldokita
 
-  var walletkita = dataToken.id
+  var walletkita = dataToken.nomor_wallet
   wallet.innerText = walletkita
   
   // Ini kalau status nya 400 (ga berhasil)

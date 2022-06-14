@@ -33,6 +33,13 @@ buttonSubmit.addEventListener("click", (e) => {
       var halamanbaru = "../ecia.html"
       var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
       var url = "https://api-ecia.herokuapp.com/api/pembelian"
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
     }
 
     if(value == "Metakantin"){
@@ -40,6 +47,15 @@ buttonSubmit.addEventListener("click", (e) => {
       var url = "https://met4kantin.herokuapp.com/api/pay/"
       var halamanbaru = "../metakantin.html"
       var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
+
+      // // Ini dari postman
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      }  
+
     }
 
     // if(value == "Moneygo"){
@@ -63,14 +79,7 @@ buttonSubmit.addEventListener("click", (e) => {
       nomor_wallet: dataToken.nomor_wallet,
       id_user: dataToken.id_user
     });
-
-    // Ini dari postman
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
+  
 
     // Ini buat nge fetch (JANGAN Diilangin)
     async function getResponse(url, requestOptions){
@@ -91,7 +100,6 @@ buttonSubmit.addEventListener("click", (e) => {
 
       // Ini kalau status nya 200 (berhasil bayar)
       if(dataJSON.status == 200){
-        console.log("pembelian berhasil")
         if(value == "ecia"){
           var raw2 = JSON.stringify({
             jumlah: nominal.value,
