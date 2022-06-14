@@ -2,6 +2,7 @@ var urlEcia = "https://api-ecia.herokuapp.com/api/profile";
 // var url = "http://localhost:8000/api/login";
 var urlSarah = "https://moneygo-api.herokuapp.com/api/register"
 var urlAbad = "https://met4kantin.herokuapp.com/api/profile"
+var urlHilmi = "https://egilwallet.herokuapp.com/api/profile"
 
 var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -17,6 +18,7 @@ buttonSubmit.addEventListener("click", (e) => {
 
     var raw = JSON.stringify({
         name: nama.value,
+        username: nama.value,
         email: email.value,
         password: pass.value,
         pass: pass.value,
@@ -44,17 +46,19 @@ buttonSubmit.addEventListener("click", (e) => {
         let dataEcia = await getResponse(urlEcia);
         let dataSarah = await getResponse(urlSarah);
         let dataAbad = await getResponse(urlAbad);
+        let dataHilmi = await getResponse(urlHilmi)
 
         var dataJSONEcia = JSON.parse(dataEcia);
         var dataJSONSarah = JSON.parse(dataSarah);
         var dataJSONAbad = JSON.parse(dataAbad);
+        let dataJSONHilmi = JSON.parse(dataHilmi)
         
-        if(dataJSONEcia.status == 200 && dataJSONAbad.status == 200 && dataJSONSarah.status == 200){
+        if(dataJSONEcia.status == 200 && dataJSONAbad.status == 200 && dataJSONSarah.status == 200 && dataJSONHilmi.status == 200){
             alert("Pendaftaran berhasil. Silahkan login.")
             window.location.href = "login.html";
         }
 
-        if(dataJSONEcia.status == 400 && dataJSONAbad.status == 400 && dataJSONSarah.status == 400){
+        if(dataJSONEcia.status == 400 || dataJSONAbad.status == 400 || dataJSONSarah.status == 400 || dataJSONHilmi.status == 400){
             if (dataJSONEcia.status == 400){
                 alert(dataJSONEcia.message)
             }
@@ -65,6 +69,10 @@ buttonSubmit.addEventListener("click", (e) => {
 
             if (dataJSONSarah.status == 400){
                 alert(dataJSONSarah.message)
+            }
+
+            if (dataJSONHilmi.status == 400){
+                alert(dataJSONHilmi.message)
             }
         }
     };

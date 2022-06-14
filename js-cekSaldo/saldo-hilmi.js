@@ -8,19 +8,16 @@ function parseJwt (token) {
 };
 
 // Ambil data cookie
-const ecia = JSON.stringify(localStorage.getItem('ecia'));
-if(ecia==null||!ecia || ecia == undefined){
-  window.location.href = "login.html"
- }
+const hilmi = JSON.stringify(localStorage.getItem('hilmi'));
 
 // Ambil Data Token
-var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
+var dataToken = JSON.parse(JSON.parse(parseJwt(hilmi)))
 
 // Untuk Fetch
 var myHeaders = new Headers();
 
 // Buat variabel token
-var token = ("Bearer " + ecia).replace(/\"/g, "");
+var token = ("Bearer " + hilmi).replace(/\"/g, "");
 
 // Ini dari postman
 myHeaders.append("Authorization", token);
@@ -32,7 +29,7 @@ const saldo = document.querySelector("#saldoku")
 const wallet = document.querySelector("#walletku")
 
 // ini URL
-var url = "https://api-ecia.herokuapp.com/api/profile/" 
+var url = "https://egilwallet.herokuapp.com/api/profile" 
 // var url = "http://localhost:8000/api/profile/" 
 
 // Ini data yang mau dikirimin ke url
@@ -63,11 +60,11 @@ async function getData(){
   let data = await getResponse();
   var dataJSON =JSON.parse(data);
 
-  var idkita = dataJSON.id_user
+  var idkita = dataJSON.username
   idku.innerText = idkita
-  var saldokita = dataJSON.jumlah
+  var saldokita = dataJSON.balance
   saldo.innerText = saldokita
-  var walletkita = dataJSON.nomor_wallet
+  var walletkita = dataJSON.username
   wallet.innerText = walletkita
   
   // Ini kalau status nya 400 (ga berhasil)

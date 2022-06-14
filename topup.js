@@ -11,6 +11,7 @@ function parseJwt (token) {
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
 const abad = JSON.stringify(localStorage.getItem('abad'));
 const sarah = JSON.stringify(localStorage.getItem('sarah'));
+const hilmi = JSON.stringify(localStorage.getItem('hilmi'));
 
 // Untuk Fetch
 var myHeaders = new Headers();
@@ -48,6 +49,12 @@ buttonSubmit.addEventListener("click", (e) => {
       var token = ("Bearer " + sarah).replace(/\"/g, "");
       var url = "https://moneygo-api.herokuapp.com/api/topup"
       var halamanbaru = "moneygo.html"
+    }
+
+    if(value == "kelompok7"){
+      var token = ("Bearer " + hilmi).replace(/\"/g, "");
+      var url = "https://egilwallet.herokuapp.com/api/topup"
+      var halamanbaru = "e-gil.html"
     }
     
     // Ini dari postman

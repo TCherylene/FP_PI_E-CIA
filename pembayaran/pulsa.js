@@ -11,6 +11,7 @@ function parseJwt (token) {
 const ecia = JSON.stringify(localStorage.getItem('ecia'));
 const sarah = JSON.stringify(localStorage.getItem('sarah'));
 const abad = JSON.stringify(localStorage.getItem('abad'));
+const hilmi = JSON.stringify(localStorage.getItem('hilmi'));
 
 // Untuk Fetch
 var myHeaders = new Headers();
@@ -34,6 +35,15 @@ buttonSubmit.addEventListener("click", (e) => {
       var dataToken = JSON.parse(JSON.parse(parseJwt(ecia))).rows[0]
       var url = "https://api-ecia.herokuapp.com/api/pembelian"
 
+          // Ini data yang mau dikirimin ke url
+      var raw = JSON.stringify({
+        nama_barang : "air",
+        jumlah: nominal.value, 
+        harga: nominal.value,
+        nomor_wallet: dataToken.nomor_wallet,
+        id_user: dataToken.id_user
+      });
+
       var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -48,6 +58,14 @@ buttonSubmit.addEventListener("click", (e) => {
       var halamanbaru = "../metakantin.html"
       var dataToken = JSON.parse(JSON.parse(parseJwt(abad)))
 
+      var raw = JSON.stringify({
+        nama_barang : "pulsa",
+        jumlah: nominal.value, 
+        harga: nominal.value,
+        nomor_wallet: dataToken.nomor_wallet,
+        id_user: dataToken.id_user
+      });
+
       // // Ini dari postman
       var requestOptions = {
         method: 'PUT',
@@ -55,7 +73,6 @@ buttonSubmit.addEventListener("click", (e) => {
         body: raw,
         redirect: 'follow'
       }  
-
     }
 
     // if(value == "Moneygo"){
@@ -65,21 +82,28 @@ buttonSubmit.addEventListener("click", (e) => {
     //   var dataToken = JSON.parse(JSON.parse(parseJwt(sarah)))
     // }
 
+    if(value == "kelompok7"){
+      var token = ("Bearer " + hilmi).replace(/\"/g, "");
+      var url = "https://egilwallet.herokuapp.com/api/pembelian"
+      var halamanbaru = "../e-gil.html"
+      var dataToken = JSON.parse(JSON.parse(parseJwt(hilmi)))
+
+      var raw = JSON.stringify({
+        email: dataToken.userEmail,
+        harga: nominal.value
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+    }
+
     // Ini dari postman
     myHeaders.append("Authorization", token);
     myHeaders.append("Content-Type", "application/json");
-
-    // Ini data yang mau dikirimin ke url
-    console.log(dataToken.id_user)
-
-    var raw = JSON.stringify({
-      nama_barang : "pulsa",
-      jumlah: nominal.value, 
-      harga: nominal.value,
-      nomor_wallet: dataToken.nomor_wallet,
-      id_user: dataToken.id_user
-    });
-  
 
     // Ini buat nge fetch (JANGAN Diilangin)
     async function getResponse(url, requestOptions){
@@ -95,8 +119,17 @@ buttonSubmit.addEventListener("click", (e) => {
     // Ini buat setelah nge fetch (JANGAN diilangin 2.0)
     async function getData(){
       let data = await getResponse(url, requestOptions);
+      
+      if(data == "Not enough balance !"){
+        alert(data)
+      }
 
       var dataJSON = JSON.parse(data);
+      if (value == "kelompok7"){
+        dataJSON = data
+      }
+      
+      // console.log(dataJSON)
 
       // Ini kalau status nya 200 (berhasil bayar)
       if(dataJSON.status == 200){
